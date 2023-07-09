@@ -11,6 +11,12 @@ def Login(request):
 def Register(request):
     return render(request, 'app/account/register.html')
 
+def Verification(request):
+    return render(request, 'app/account/code.html')
+
+def setPassword(request):
+    return render(request, 'app/account/register1.html')
+
 def Profile(request):
     return render(request, 'app/account/profile.html')
 
