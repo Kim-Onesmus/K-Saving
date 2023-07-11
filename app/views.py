@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from . models import Client
+from . forms import ClientForm
 
 
 def Index(request):
@@ -63,7 +64,17 @@ def Verification(request):
     return render(request, 'app/account/code.html')
 
 def Profile(request):
-    return render(request, 'app/account/profile.html')
+    client = request.user
+    form = ClientForm(instance=client)
+    if request.method == 'POST':
+        form = ClientForm(request.POST, request.FILES, instance=client)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Profile edited')
+            return redirect('profile')
+        
+    context = {'form':form}
+    return render(request, 'app/account/profile.html', context)
 
 def Logout(request):
     return render(request, 'app/account/logout.html')
