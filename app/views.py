@@ -70,19 +70,17 @@ def Profile(request):
     form = ClientForm(instance=client)
     password_form = PasswordChangeForm(request.user)
     if request.method == 'POST':
-        if form:
-            form = ClientForm(request.POST, request.FILES, instance=client)
-            if form.is_valid():
-                form.save()
-                messages.info(request, 'Profile edited')
-                return redirect('profile')
-        
-        else:
-            password_form = PasswordChangeForm(request.user, request.POST)
-            if password_form.is_valid():
-                password_form.save()
-                messages.info(request, 'Profile information updated')
-                return redirect('profile')
+        form = ClientForm(request.POST, request.FILES, instance=client)
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Profile edited')
+            return redirect('profile')
+
+        if password_form.is_valid():
+            password_form.save()
+            messages.info(request, 'Profile information updated')
+            return redirect('profile')
     
     context = {'form':form, 'password_form':password_form}
     return render(request, 'app/account/profile.html', context)
