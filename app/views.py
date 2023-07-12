@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
-from . models import Client
+from . models import Client, ContactUs
 from . forms import ClientForm
 
 
@@ -50,7 +51,7 @@ def Login(request):
         
         if user is not None:
             auth.login(request, user)
-            messages.info(request, 'Welcome back {user.frist_name}')
+            messages.info(request, 'Welcome back')
             return redirect('index')
         else:
             messages.error(request, 'Invalid credetials')
@@ -64,19 +65,33 @@ def Verification(request):
     return render(request, 'app/account/code.html')
 
 def Profile(request):
-    client = request.user
+    user = request.user
+    client = user
     form = ClientForm(instance=client)
+    password_form = PasswordChangeForm(request.user)
     if request.method == 'POST':
-        form = ClientForm(request.POST, request.FILES, instance=client)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Profile edited')
-            return redirect('profile')
+        if form:
+            form = ClientForm(request.POST, request.FILES, instance=client)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Profile edited')
+                return redirect('profile')
         
-    context = {'form':form}
+        else:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                password_form.save()
+                messages.info(request, 'Profile information updated')
+                return redirect('profile')
+    
+    context = {'form':form, 'password_form':password_form}
     return render(request, 'app/account/profile.html', context)
 
 def Logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        messages.info(request, 'Logged Out Successfully')
+        return redirect('login')
     return render(request, 'app/account/logout.html')
 
 def Deposit(request):
@@ -92,6 +107,16 @@ def Withdrawals(request):
     return render(request, 'app/history/withdraws.html')
 
 def Contact(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        messange = request.POST['messange']
+        
+        contact_details = ContactUs.objects.create(name=name, email=email, subject=subject, messange=messange)
+        contact_details.save()
+        messages.info(request, 'Messange sent')
+        return redirect('contact')
     return render(request, 'app/contact.html')
 
 def About(request):

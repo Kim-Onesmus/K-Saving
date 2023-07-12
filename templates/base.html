@@ -196,7 +196,8 @@
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="{% static 'img/profile-img.jpg' %}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block ps-2" id="userLastNameSpan" style="text-transform: capitalize;font-size: 20px;"> {{user.first_name}}.</span>
+            <span class="d-none d-md-block ps-2" id="userLastNameSpan"
+              style="text-transform: capitalize;font-size: 20px;"> {{user.first_name}}.</span>
             <span>.</span>
             <span class="d-none d-md-block dropdown-toggle ps-2">{{user.last_name}}</span>
           </a>
@@ -343,6 +344,7 @@
   <script src="{% static 'vendor/tinymce/tinymce.min.js' %}"></script>
   <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/messange.js' %}"></script>
 </body>
 
 </html>

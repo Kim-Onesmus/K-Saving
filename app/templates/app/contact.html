@@ -16,7 +16,6 @@
     </div><!-- End Page Title -->
 
     <section class="section contact">
-
         <div class="row gy-4">
 
             <div class="col-xl-6">
@@ -26,28 +25,28 @@
                         <div class="info-box card">
                             <i class="bi bi-geo-alt"></i>
                             <h3>Address</h3>
-                            <p>A108 Adam Street,<br>New York, NY 535022</p>
+                            <p>Kitere, Center<br>Migori, Thinkers Village Hostel, Room 10</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="info-box card">
                             <i class="bi bi-telephone"></i>
                             <h3>Call Us</h3>
-                            <p>+1 5589 55488 55<br>+1 6678 254445 41</p>
+                            <p>+254 792613079<br>+254 797682577</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="info-box card">
                             <i class="bi bi-envelope"></i>
                             <h3>Email Us</h3>
-                            <p>info@example.com<br>contact@example.com</p>
+                            <p>contactk-save@gmail.com<br>kimonesmuske@gmail.com</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="info-box card">
                             <i class="bi bi-clock"></i>
                             <h3>Open Hours</h3>
-                            <p>Monday - Friday<br>9:00AM - 05:00PM</p>
+                            <p>Monday - Friday<br>8:00AM - 05:00PM</p>
                         </div>
                     </div>
                 </div>
@@ -56,7 +55,18 @@
 
             <div class="col-xl-6">
                 <div class="card p-4">
-                    <form action="forms/contact.php" method="post" class="php-email-form">
+                    {% for message in messages %}
+                    <div id="alarmmsg"
+                        style="position: fixed; left: 50%; transform: translate(-50%, -50%); width: 60%; z-index: 9999;"
+                        class="alert {{message.tags}} alert-dismissible" role="alert">
+                        <button type="submit" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{message | safe}}
+                    </div>
+                    {% endfor %}
+                    <form method="post" class="php-email-form">
+                        {% csrf_token %}
                         <div class="row gy-4">
 
                             <div class="col-md-6">
@@ -72,7 +82,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <textarea class="form-control" name="message" rows="6" placeholder="Message"
+                                <textarea class="form-control" name="messange" rows="6" placeholder="Message"
                                     required></textarea>
                             </div>
 
@@ -95,5 +105,11 @@
     </section>
 
 </main>
+<script>
+    document.getElementById("#alarmmsg").innerHTML = msg;
 
+    setTimeout(function () {
+        document.getElementById("#alarmmsg").innerHTML = '';
+    }, 3000);
+</script>
 {% endblock content %}

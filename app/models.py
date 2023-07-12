@@ -11,3 +11,13 @@ class Client(models.Model):
     def __str__(self):
         return self.first_name
     
+    
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=30)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    messange = models.TextField(max_length=200)
+    
+    def __str__(self):
+        return self.name
