@@ -80,7 +80,7 @@ def Profile(request):
         if password_form.is_valid():
             password_form.save()
             messages.info(request, 'Profile information updated')
-            return redirect('profile')
+            return redirect('login')
     
     context = {'form':form, 'password_form':password_form}
     return render(request, 'app/account/profile.html', context)
