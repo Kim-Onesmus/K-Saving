@@ -15,6 +15,10 @@ class Client(models.Model):
         if not self.profile_picture:
             self.profile_picture.name = generate_default_profile_picture(self.user)
         super().save(*args, **kwargs)
+        
+        
+    def __str__(self):
+        return self.first_name
     
     
 
