@@ -11,7 +11,6 @@ def Index(request):
 
 def Register(request):
     if request.method == 'POST':
-        profile_picture = request.POST['profile_picture']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
