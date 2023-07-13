@@ -29,7 +29,7 @@ def Register(request):
                 user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
                 user.save()
                 
-                client_details = Client.objects.create(first_name=first_name, last_name=last_name, email=email, username=username)
+                client_details = Client.objects.create(user=user, first_name=first_name, last_name=last_name, email=email, username=user.username)
                 client_details.save()
                 
                 messages.info(request, 'Account created')
