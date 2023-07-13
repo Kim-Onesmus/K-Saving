@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import generate_default_profile_picture
 # Create your models here.
 
 class Client(models.Model):
@@ -10,8 +11,10 @@ class Client(models.Model):
     email = models.EmailField()
     username = models.PositiveIntegerField(max_length=13)
     
-    def __str__(self):
-        return self.first_name
+    def save(self, *args, **kwargs):
+        if not self.profile_picture:
+            self.profile_picture.name = generate_default_profile_picture(self.user)
+        super().save(*args, **kwargs)
     
     
 
