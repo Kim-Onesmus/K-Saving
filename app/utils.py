@@ -11,7 +11,10 @@ def generate_default_profile_picture(user):
     position = ((size[0] - text_size[0]) / 2, (size[1] - text_size[1]) / 2)
     draw.text(position, initials, fill='white', font=font)
     
-    # Save the generated image with a unique name
+    # Save the generated image in the media directory
     filename = f'{user.first_name}_profile_pic.jpg'
-    image.save(os.path.join('media', 'media', filename))
-    return filename
+    file_path = os.path.join(settings.MEDIA_ROOT, 'media', filename)
+    image.save(file_path)
+    
+    # Return the relative URL of the saved image
+    return os.path.join('media', filename)
