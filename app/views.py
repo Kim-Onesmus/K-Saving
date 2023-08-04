@@ -21,6 +21,21 @@ def MyPlan(request):
         plan = request.POST['plan']
         amount = request.POST['amount']
         target = request.POST['target']
+        user = request.user
+        
+        if plan and amount and target:
+            existing_plan = UserPlan.objects.filter(user=user).first()
+            if existing_plan:
+                messages.error(request, 'You already have an active plan.')
+                return redirect('my_plan')
+            
+            else:
+                new_plan = UserPlan(user=user, plan=plan, amount=amount, target=target)
+                new_plan.save()
+
+                messages.success(request, 'Plan saved successfully.')
+                return redirect('my_plan')
+            
         
         
     return render(request, 'app/plan.html')
