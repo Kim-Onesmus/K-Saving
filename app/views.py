@@ -9,7 +9,7 @@ from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
 from . models import Client, ContactUs, MpesaPayment
-from . forms import ClientForm
+from . forms import ClientForm, My_PlanForm
 
 
 def Index(request):
@@ -17,11 +17,14 @@ def Index(request):
 
 
 def MyPlan(request):
+    plan = request.user.
     if request.method == 'POST':
         plan = request.POST['plan']
         amount = request.POST['amount']
         target = request.POST['target']
         user = request.user
+        
+        form = My_PlanForm(instance=)
         
         if plan and amount and target:
             existing_plan = UserPlan.objects.filter(user=user).first()
