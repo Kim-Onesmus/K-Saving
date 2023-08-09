@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
+import requests
 from . models import Client, ContactUs
 from . forms import ClientForm
 
