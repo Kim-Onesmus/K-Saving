@@ -48,6 +48,12 @@
                                     Profile</button>
                             </li>
 
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab"
+                                    data-bs-target="#profile-change-password">Change
+                                    Password</button>
+                            </li>
+
                         </ul>
                         <div class="tab-content pt-2">
 
@@ -142,28 +148,70 @@
 
                                         </div>
                                     </div>
-
-
                                 </div>
-
-                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                                </div>
-                                <div class="tab-pane fade pt-3" id="profile-change-password">
-                                    <form method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        {{password_form.as_p}}
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                            </div>
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row mb-3">
+                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
+                                            Image</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <img src="{{ user.client.profile_picture.url }}" alt="Profile">
+                                            <div class="pt-2">
+                                                {{form.profile_picture}}
+                                            </div>
                                         </div>
-                                    </form><!-- End Change Password Form -->
-                                </div>
-                            </div><!-- End Bordered Tabs -->
-                        </div>
-                    </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First
+                                            Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.first_name}}
+                                        </div>
+                                    </div>
 
+                                    <div class="row mb-3">
+                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.last_name}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Phone Number</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.username}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.email}}
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form><!-- End Profile Edit Form -->
+                            </div>
+                            <div class="tab-pane fade pt-3" id="profile-change-password">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{password_form.as_p}}
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                    </div>
+                                </form><!-- End Change Password Form -->
+                            </div>
+                        </div><!-- End Bordered Tabs -->
+                    </div>
                 </div>
+
             </div>
+        </div>
     </section>
 
 </main>
