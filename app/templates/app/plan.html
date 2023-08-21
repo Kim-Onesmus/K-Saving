@@ -47,13 +47,6 @@
                                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
                                     Profile</button>
                             </li>
-
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#profile-change-password">Change
-                                    Password</button>
-                            </li>
-
                         </ul>
                         <div class="tab-content pt-2">
 
@@ -161,23 +154,16 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label"></label>
+                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Amount per plan</label>
                                         <div class="col-md-8 col-lg-9">
-                                            {{form.last_name}}
+                                            {{form.amount}}
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Phone Number</label>
+                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Target</label>
                                         <div class="col-md-8 col-lg-9">
-                                            {{form.username}}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            {{form.email}}
+                                            {{form.target}}
                                         </div>
                                     </div>
 
@@ -185,15 +171,6 @@
                                         <button type="submit" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
-                            </div>
-                            <div class="tab-pane fade pt-3" id="profile-change-password">
-                                <form method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    {{password_form.as_p}}
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
-                                    </div>
-                                </form><!-- End Change Password Form -->
                             </div>
                         </div><!-- End Bordered Tabs -->
                     </div>
