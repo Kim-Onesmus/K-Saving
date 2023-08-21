@@ -17,6 +17,12 @@ def Index(request):
 
 
 def MyPlan(request):
+    if request.method == 'POST':
+        plan = request.POST['plan']
+        amount = request.POST['amount']
+        target = request.POST['target']
+        
+        
     return render(request, 'app/plan.html')
 
 def Register(request):
