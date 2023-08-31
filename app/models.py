@@ -40,7 +40,7 @@ class Client(models.Model):
         return self.first_name
 
 class My_Plan(models.Model):
-    plan = models.CharField(max_length=100, choices=)
+    plan = models.CharField(max_length=100, choices=myPlan)
     amount = models.PositiveIntegerField()
     target = models.PositiveIntegerField()
     

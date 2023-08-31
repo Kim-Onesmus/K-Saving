@@ -24,12 +24,12 @@
                         <!-- Bordered Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered">
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab"
+                                <button class="nav-link active" data-bs-toggle="tab"
                                     data-bs-target="#profile-change-password">My Plan</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab"
+                                <button class="nav-link" data-bs-toggle="tab"
                                     data-bs-target="#profile-overview">Make Plan</button>
                             </li>
 
@@ -43,27 +43,22 @@
                                 <h5 class="card-title">Profile Details</h5>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">First Name</div>
+                                    <div class="col-lg-3 col-md-4 label ">My Plan</div>
                                     <div class="col-lg-9 col-md-8">{{user.first_name}}</div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Last Name</div>
+                                    <div class="col-lg-3 col-md-4 label">Amount </div>
                                     <div class="col-lg-9 col-md-8">{{user.last_name}}</div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Phone Number</div>
+                                    <div class="col-lg-3 col-md-4 label">Target</div>
                                     <div class="col-lg-9 col-md-8">{{user.username}}</div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Email</div>
-                                    <div class="col-lg-9 col-md-8">{{user.email}}</div>
-                                </div>
-
                             </div>
-                            <div class="tab-pane fade show profile-overview" id="profile-overview">
+                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                 <div class="container">
                                     <div class="row justify-content-center">
                                         <div
