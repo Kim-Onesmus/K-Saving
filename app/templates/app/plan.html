@@ -39,7 +39,30 @@
                             </li>
                         </ul>
                         <div class="tab-content pt-2">
+                            <div class="tab-pane fade pt-3" id="profile-change-password">
+                                <h5 class="card-title">Profile Details</h5>
 
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">First Name</div>
+                                    <div class="col-lg-9 col-md-8">{{user.first_name}}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Last Name</div>
+                                    <div class="col-lg-9 col-md-8">{{user.last_name}}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Phone Number</div>
+                                    <div class="col-lg-9 col-md-8">{{user.username}}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-9 col-md-8">{{user.email}}</div>
+                                </div>
+
+                            </div>
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                 <div class="container">
                                     <div class="row justify-content-center">
