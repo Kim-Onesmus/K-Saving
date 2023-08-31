@@ -32,8 +32,14 @@ class Client(models.Model):
         
     def __str__(self):
         return self.first_name
+
+class My_Plan(models.Model):
+    plan = models.CharField()
+    amount = models.PositiveIntegerField()
+    target = models.PositiveIntegerField()
     
-    
+    def __str__(self):
+        return self.plan
 
 class ContactUs(models.Model):
     name = models.CharField(max_length=30)
