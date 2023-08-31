@@ -5,6 +5,12 @@ from django.conf import settings
 import os
 # Create your models here.
 
+myPlan = [
+    ('daily','daily'),
+    ('weekly','weekly'),
+    ('monthly','monthly'),
+]
+
 def user_profile_picture_path(instance, filename):
     # Generate a unique filename for the profile picture
     ext = filename.split('.')[-1]
@@ -34,7 +40,7 @@ class Client(models.Model):
         return self.first_name
 
 class My_Plan(models.Model):
-    plan = models.CharField()
+    plan = models.CharField(max_length=100, choices=)
     amount = models.PositiveIntegerField()
     target = models.PositiveIntegerField()
     
