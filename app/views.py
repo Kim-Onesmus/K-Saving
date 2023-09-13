@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from requests.auth import HTTPBasicAuth
+from django.http import HttpResponse, JsonResponse
+import json
 from . models import Client, ContactUs
 from . forms import ClientForm
 
@@ -92,8 +95,104 @@ def Logout(request):
         return redirect('login')
     return render(request, 'app/account/logout.html')
 
+
+def getAccessToken(request):
+    consumer_key = ''
+    consumer_secret = ''
+    api_URL = ''
+    
+    r = request.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    mpesa_access_toke = json.loads(r.text)
+    validated_mpesa_access_token = mpesa_access_toke['access_token']
+    return HttpResponse(validated_mpesa_access_token)
+
 def Deposit(request):
+    if request.method == 'POST':
+        number = request.POST['number']
+        amount = request.POST['amount']
+        
+        if len(number) == 12 and number.startswith('254') or number.startswith('2541'):
+            access_token = MpesaAccessToken.validated_mpesa_access_token
+            api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+            headers = {"Authorization": "Bearer %s" % access_token}
+            payload = {
+                "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
+                "Password": LipanaMpesaPpassword.decode_password,
+                "Timestamp": LipanaMpesaPpassword.lipa_time,
+                "TransactionType": "CustomerPayBillOnline",
+                "Amount": amount,
+                "PartyA": number,
+                "PartyB": LipanaMpesaPpassword.Business_short_code,
+                "PhoneNumber": number,
+                "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+                "AccountReference": "KimTech",
+                "TransactionDesc": "Savings"
+            }
+            
+            response = requests.post(api_url, json=payload, headers=headers)
+            messages.success(request, 'Submitted successfully')
+            return redirect('deposit')
+        else:
+            messages.error(request, f"Phone number '{number}' is not valid or wron format")
+            return redirect('deposit')
+    else:
+        return render(request, 'app/transaction/deposit.html')
     return render(request, 'app/transaction/deposit.html')
+
+@csrf_exempt
+def register_urls(request):
+    access_token = MpesaAccessToken.validated_mpesa_access_token
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    headers = {"Authorization": "Bearer %s" % access_token}
+    options = {"ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
+               "ResponseType": "Completed",
+               "ConfirmationURL": "https://mydomain.com/confirmation",
+               "ValidationURL": "https://mydomain.com/validation"}
+    response = requests.post(api_url, json=options, headers=headers)
+
+    return HttpResponse(response.text)
+
+
+@csrf_exempt
+def call_back(request):
+    pass
+
+
+@csrf_exempt
+def validation(request):
+
+    context = {
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    }
+    return JsonResponse(dict(context))
+
+
+@csrf_exempt
+def confirmation(request):
+    mpesa_body =request.body.decode('utf-8')
+    mpesa_payment = json.loads(mpesa_body)
+
+    payment = MpesaPayment(
+        first_name=mpesa_payment['FirstName'],
+        last_name=mpesa_payment['LastName'],
+        middle_name=mpesa_payment['MiddleName'],
+        description=mpesa_payment['TransID'],
+        phone_number=mpesa_payment['MSISDN'],
+        amount=mpesa_payment['TransAmount'],
+        reference=mpesa_payment['BillRefNumber'],
+        organization_balance=mpesa_payment['OrgAccountBalance'],
+        type=mpesa_payment['TransactionType'],
+
+    )
+    payment.save()
+
+    context = {
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    }
+
+    return JsonResponse(dict(context))
 
 def Withdraw(request):
     return render(request, 'app/transaction/withdraw.html')
