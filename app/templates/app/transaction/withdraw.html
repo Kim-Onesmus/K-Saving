@@ -1,0 +1,74 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Withdraw</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+        <li class="breadcrumb-item active">Withdraw</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <div class="container">
+
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-7 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="card mb-3">
+              <div class="card-body">
+
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4">Withdraw</h5>
+                  <p class="text-center small">Enter your phone number & amount to withdraw</p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="row g-3 needs-validation">
+
+                  <div class="col-12">
+                    <label for="yourUsername" class="form-label">Phone number</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text" id="inputGroupPrepend">+254</span>
+                      <input type="number" name="phone" class="form-control" id="yourUsername" required>
+                      <div class="invalid-feedback">Please enter your phone number.</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="yourUsername" class="form-label">Amount</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text" id="inputGroupPrepend">KSH.</span>
+                      <input type="number" name="amount" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter amount to withdraw</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                      <label class="form-check-label" for="rememberMe">Confirm</label>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-primary w-100" type="submit">Submit</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+{% endblock content %}

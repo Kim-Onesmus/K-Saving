@@ -1,0 +1,91 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Deposit History</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+          <li class="breadcrumb-item">Deposits</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+
+              <!-- Default Table -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Transaction Code</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>001</td>
+                    <td>3RFGBNURTS89EGHBUI</td>
+                    <td>100</td>
+                    <td>0792613079</td>
+                    <td><span class="badge bg-success">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>002</td>
+                    <td>3RFGBNURTS89EGHBUI</td>
+                    <td>100</td>
+                    <td>0792613079</td>
+                    <td><span class="badge bg-warning">Cancelled</span></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>003</td>
+                    <td>3RFGBNURTS89EGHBUI</td>
+                    <td>100</td>
+                    <td>0792613079</td>
+                    <td><span class="badge bg-success">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>004</td>
+                    <td>3RFGBNURTS89EGHBUI</td>
+                    <td>100</td>
+                    <td>0792613079</td>
+                    <td><span class="badge bg-success">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>005</td>
+                    <td>3RFGBNURTS89EGHBUI</td>
+                    <td>100</td>
+                    <td>0792613079</td>
+                    <td><span class="badge bg-success">Approved</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- End Default Table Example -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  {% endblock content %}

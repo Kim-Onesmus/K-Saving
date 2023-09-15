@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Log Out</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Log out</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <div class="tab-content pt-2" id="myTabjustifiedContent">
+                            <div class="tab-pane fade show active" id="home-justified" role="tabpanel"
+                                aria-labelledby="home-tab">
+                                Go back to the previous page
+                            </div>
+                            <div class="tab-pane fade" id="profile-justified" role="tabpanel"
+                                aria-labelledby="profile-tab">
+                                Log Out
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
+                            <li class="nav-item flex-fill" role="presentation">
+                                <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#home-justified" type="button" role="tab" aria-controls="home"
+                                    aria-selected="true">Go back</button>
+                            </li>
+                            <li class="nav-item flex-fill" role="presentation">
+                                <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile"
+                                    aria-selected="false">Log Out</button>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}
