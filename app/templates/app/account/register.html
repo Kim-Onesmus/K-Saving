@@ -51,7 +51,14 @@
                     <p class="text-center small"> <b>1.</b> Enter your personal details.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  {% for data in messages %}
+                  <p style="color: red;">{{data}}</p>
+                  {% endfor %}
+
+                  <form method="post" class="row g-3 needs-validation">
+
+                    {% csrf_token %}
+
                     <div class="col-6">
                       <label for="yourName" class="form-label">Your First Name</label>
                       <input type="text" name="first" class="form-control" id="yourName" required>
