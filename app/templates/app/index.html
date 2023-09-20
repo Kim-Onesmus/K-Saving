@@ -12,7 +12,16 @@
             </ol>
         </nav>
     </div><!-- End Page Title -->
-
+    <div id="floating">
+        {% for message in messages %}
+        <div class="alert {{message.tags}} alert-dismissible" role="alert">
+            <button type="submit" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{message | safe}}
+        </div>
+        {% endfor %}
+    </div>
     <section class="section dashboard">
         <div class="row">
             <div class="row">
