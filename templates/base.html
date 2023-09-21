@@ -195,7 +195,7 @@
 
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{% static 'img/profile-img.jpg' %}" alt="Profile" class="rounded-circle">
+            <img src="{{ user.client.profile_picture.url }}"  alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block ps-2" id="userLastNameSpan"
               style="text-transform: capitalize;font-size: 20px;"> {{user.first_name}}.</span>
             <span>.</span>
