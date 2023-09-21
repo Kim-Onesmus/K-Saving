@@ -25,4 +25,3 @@ def generate_default_profile_picture(user, font_size=72):
     # Return the relative URL of the saved image
     return os.path.join('media', filename)
 
-    print(f"Text Size: {text_size}")
