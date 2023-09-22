@@ -39,7 +39,7 @@
                                     aria-selected="false">Why choose us</button>
                             </li>
                             <li class="nav-item flex-fill" role="presentation">
-                                <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab"
+                                <button class="nav-link w-100" id="team-tab" data-bs-toggle="tab"
                                     data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact"
                                     aria-selected="false">Meet the team</button>
                             </li>
@@ -80,15 +80,21 @@
                                 the way. If you have questions or need assistance, don't hesitate to reach out to our
                                 friendly team.
                             </div>
-                            <div class="tab-pane fade" id="profile-justified" role="tabpanel"
-                                aria-labelledby="profile-tab">
-                                Our mission is to empower individuals to save efficiently and reach their financial
-                                dreams.
-                                We believe that financial stability is within everyone's reach, and we're here to guide
-                                you on your savings journey.
+                            <div class="tab-pane fade" id="contact-justified" role="tabpanel"
+                                aria-labelledby="team-tab">
+
+                                <div class="card">
+                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                                        <img src="{{ user.client.profile_picture.url }}" alt="Profile"
+                                            class="rounded-circle">
+                                        <h2>{{user.first_name}} {{user.last_name}}</h2>
+                                        <h3>{{user.username}}</h3>
+                                    </div>
+                                </div>
+
                             </div>
                         </div><!-- End Default Tabs -->
-
                     </div>
                 </div>
             </div>
