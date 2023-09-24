@@ -94,7 +94,7 @@ def Profile(request):
 def Logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        messages.info(request, 'Logged Out Successfully')
+        messages.info(request, 'Logged Out')
         return redirect('login')
     return render(request, 'app/account/logout.html')
 
