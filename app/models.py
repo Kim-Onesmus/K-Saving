@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .utils import generate_default_profile_picture
+from django.conf import settings
+import os
 # Create your models here.
 
 def user_profile_picture_path(instance, filename):
