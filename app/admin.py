@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Client, ContactUs, Withdraw, Pay
+from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment
 
 # Register your models here.
 @admin.register(Client)
@@ -11,10 +11,15 @@ class ClientTable(admin.ModelAdmin):
 class ContactUsTable(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject', 'messange')
 
-@amin.register(Pay)
+
+@admin.register(Pay)
 class PayTable(admin.ModelAdmin):
-    list_display = ('amount')
+    list_display = ('amount', 'number')
     
+@admin.register(MpesaPayment)
+class MpesaPaymentTable(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'middle_name', 'description', 'phone_number', 'amount', 'reference', 'organization_balance', 'type')
+ 
 @admin.register(Withdraw)
 class WithdrawTable(admin.ModelAdmin):
     list_display = ('number', 'amount')
