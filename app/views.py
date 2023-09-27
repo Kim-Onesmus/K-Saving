@@ -201,6 +201,7 @@ def Withdraw(request):
     return render(request, 'app/transaction/withdraw.html')
 
 def Deposits(request):
+    user = request.client.user
     return render(request, 'app/history/deposits.html')
 
 def Withdrawals(request):
