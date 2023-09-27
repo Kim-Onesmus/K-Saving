@@ -100,3 +100,8 @@ class MpesaPayment(BaseModel):
     def __str__(self):
         return self.first_name    
     
+    
+    
+class Withdraw(models.Model):
+    number = models.PositiveIntegerField(max_length=13)
+    amount = models.PositiveIntegerField(max_digits=10, decimal_places=2)
