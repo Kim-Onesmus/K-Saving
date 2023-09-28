@@ -207,7 +207,12 @@ def Withdraw(request):
     return render(request, 'app/transaction/withdraw.html')
 
 def Deposits(request):
-    return render(request, 'app/history/deposits.html')
+    user = request.user
+    client = Client.objects.get(user=user)
+    deposits = MpesaPayment.objects.filter(phone_number=client.username)
+    
+    context = {'deposits':deposits}
+    return render(request, 'app/history/deposits.html', context)
 
 def Withdrawals(request):
     return render(request, 'app/history/withdraws.html')
