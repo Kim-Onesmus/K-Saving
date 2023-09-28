@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
-from . models import Client, ContactUs, MpesaPayment
+from . models import Client, ContactUs, MpesaPayment, My_Plan
 from . forms import ClientForm, My_PlanForm
 
 
@@ -17,31 +17,39 @@ def Index(request):
 
 
 def MyPlan(request):
-    plan = request.user.
+    user = request.user
+    client = user.client
+    existing_plan = My_Plan.objects.filter(client=client).first()
+    form = My_PlanForm(instance=existing_plan)
+    
     if request.method == 'POST':
         plan = request.POST['plan']
         amount = request.POST['amount']
         target = request.POST['target']
-        user = request.user
         
-        form = My_PlanForm(instance=)
-        
+        form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
         if plan and amount and target:
-            existing_plan = UserPlan.objects.filter(user=user).first()
             if existing_plan:
                 messages.error(request, 'You already have an active plan.')
                 return redirect('my_plan')
             
             else:
-                new_plan = UserPlan(user=user, plan=plan, amount=amount, target=target)
+                new_plan = My_Plan(client=client, plan=plan, amount=amount, target=target)
                 new_plan.save()
 
                 messages.success(request, 'Plan saved successfully.')
                 return redirect('my_plan')
             
-        
-        
-    return render(request, 'app/plan.html')
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Plan edited successfully')
+            return redirect('my_plan')   
+    else:
+        return render(request, 'app/plan.html') 
+    
+    plan = My_Plan.objects.get(client=client)
+    context = {'form':form, 'existing_pan':existing_plan, 'plan':plan}
+    return render(request, 'app/plan.html', context)
 
 def Register(request):
     if request.method == 'POST':
