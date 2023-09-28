@@ -206,9 +206,7 @@ def confirmation(request):
 def Withdraw(request):
     return render(request, 'app/transaction/withdraw.html')
 
-def Deposits(request, pk):
-    client = get_object_or_404(Client, id=pk)
-    deposits = Deposit.objects.filter(client=client)
+def Deposits(request):
     return render(request, 'app/history/deposits.html')
 
 def Withdrawals(request):
