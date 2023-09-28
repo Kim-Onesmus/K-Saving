@@ -17,7 +17,7 @@ urlpatterns = [
     path('c2b/callback', views.call_back, name="call_back"),
     path('withdraw', views.Withdraw, name='withdraw'),
     
-    path('deposits</str:pk>/', views.Deposits, name='deposits'),
+    path('deposits/<str:pk>/', views.Deposits, name='deposits'),
     path('withdraws', views.Withdrawals, name='withdraws'),
     
     path('contact', views.Contact, name='contact'),

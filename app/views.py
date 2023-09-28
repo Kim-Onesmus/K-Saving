@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
@@ -25,22 +25,24 @@ def Register(request):
         password1 = request.POST['password1']
         
         if password == password1:
-            if Client.objects.filter(username=username).exists():
-                messages.info(request, 'Phone number already exists')
-                return redirect('/')
-            elif Client.objects.filter(email=email).exists():
-                messages.info(request, 'Email taken')
-                return redirect('/')
+            if username.startswith(2547) and username.len(13):
+                if Client.objects.filter(username=username).exists():
+                    messages.info(request, 'Phone number already exists')
+                    return redirect('/')
+                elif Client.objects.filter(email=email).exists():
+                    messages.info(request, 'Email taken')
+                    return redirect('/')
+                else:
+                    user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
+                    user.save()
+                    
+                    client_details = Client.objects.create(user=user, first_name=first_name, last_name=last_name, email=email, username=user.username)
+                    client_details.save()
+                    
+                    messages.info(request, 'Account created')
+                    return redirect('login')
             else:
-                user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
-                user.save()
-                
-                client_details = Client.objects.create(user=user, first_name=first_name, last_name=last_name, email=email, username=user.username)
-                client_details.save()
-                
-                messages.info(request, 'Account created')
-                return redirect('login')
-                
+                messages.error(request, 'Enter a valid number')
         else:
             messages.info(request, 'Passwords dont match')
             return redirect('/')
@@ -113,7 +115,7 @@ def Deposit(request):
     if request.method == 'POST':
         number = request.POST['number']
         amount = request.POST['amount']
-        
+        user = request.user
         if len(number) == 12 and number.startswith('254') or number.startswith('2541'):
             access_token = MpesaAccessToken.validated_mpesa_access_token
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -131,7 +133,11 @@ def Deposit(request):
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
-            
+            deposit = Deposit.objects.create(
+                client=user.client,
+                amount=amount,
+                phone_number=number,
+            )
             response = requests.post(api_url, json=payload, headers=headers)
             messages.success(request, 'Submitted successfully')
             return redirect('deposit')
@@ -200,8 +206,9 @@ def confirmation(request):
 def Withdraw(request):
     return render(request, 'app/transaction/withdraw.html')
 
-def Deposits(request):
-    # user = MpesaPayment.objects.filter(id=pk)
+def Deposits(request, pk):
+    client = get_object_or_404(Client, id=pk)
+    deposits = Deposit.objects.filter(client=client)
     return render(request, 'app/history/deposits.html')
 
 def Withdrawals(request):

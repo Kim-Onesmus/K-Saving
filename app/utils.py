@@ -18,7 +18,7 @@ def generate_default_profile_picture(user, font_size=72):
     draw.text(position, initials, fill='white', font=font)
     
     # Save the generated image in the media directory
-    filename = f'{user.first_name}_profile_pic.jpg'
+    filename = f'{user.username}_profile_pic.jpg'
     file_path = os.path.join(settings.MEDIA_ROOT, 'media', filename)
     image.save(file_path)
     
