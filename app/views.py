@@ -74,7 +74,7 @@ def Verification(request):
 
 def Profile(request):
     user = request.user
-    client = user
+    client = user.client
     form = ClientForm(instance=client)
     password_form = PasswordChangeForm(request.user)
     if request.method == 'POST':
