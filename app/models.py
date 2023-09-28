@@ -13,7 +13,7 @@ def user_profile_picture_path(instance, filename):
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(null=True, blank=True, upload_to='media', default='bg0.png')
+    profile_picture = models.ImageField(null=True, blank=True, upload_to='media', default='media/bg0.png')
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     email = models.EmailField()
