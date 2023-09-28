@@ -15,6 +15,10 @@ from . forms import ClientForm
 def Index(request):
     return render(request, 'app/index.html')
 
+
+def MyPlan(request):
+    return render(request, 'app/plan.html')
+
 def Register(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
