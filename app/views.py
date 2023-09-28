@@ -25,7 +25,7 @@ def Register(request):
         password1 = request.POST['password1']
         
         if password == password1:
-            if username.startswith(2547) and username.len(13):
+            if len(username) == 12 and username.startswith('2547'):
                 if Client.objects.filter(username=username).exists():
                     messages.info(request, 'Phone number already exists')
                     return redirect('/')
@@ -116,7 +116,7 @@ def Deposit(request):
         number = request.POST['number']
         amount = request.POST['amount']
         user = request.user
-        if len(number) == 12 and number.startswith('254') or number.startswith('2541'):
+        if len(number) == 12 and number.startswith('254') or number.startswith('2547'):
             access_token = MpesaAccessToken.validated_mpesa_access_token
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
             headers = {"Authorization": "Bearer %s" % access_token}
