@@ -214,7 +214,6 @@ def validation(request):
     return JsonResponse(dict(context))
 
 
-
 @csrf_exempt
 def confirmation(request):
     mpesa_body =request.body.decode('utf-8')
@@ -230,15 +229,12 @@ def confirmation(request):
         reference=mpesa_payment['BillRefNumber'],
         organization_balance=mpesa_payment['OrgAccountBalance'],
         type=mpesa_payment['TransactionType'],
-
     )
     payment.save()
-
     context = {
         "ResultCode": 0,
         "ResultDesc": "Accepted"
     }
-
     return JsonResponse(dict(context))
 
 def Withdraw(request):
