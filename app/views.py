@@ -214,6 +214,7 @@ def validation(request):
     return JsonResponse(dict(context))
 
 
+
 @csrf_exempt
 def confirmation(request):
     mpesa_body =request.body.decode('utf-8')
