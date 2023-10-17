@@ -41,10 +41,10 @@
                         <div class="tab-content pt-2">
                             <div class="tab-pane fade show active profile-overview" id="profile-change-password">
                                 <h5 class="card-title">Plan Details</h5>
-
+                                {% for data in plan %}
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">My Plan</div>
-                                    <div class="col-lg-9 col-md-8">{{plan.plan}}</div>
+                                    <div class="col-lg-9 col-md-8">{{data.plan}}</div>
                                 </div>
 
                                 <div class="row">
@@ -56,6 +56,7 @@
                                     <div class="col-lg-3 col-md-4 label">Target</div>
                                     <div class="col-lg-9 col-md-8">{{user.username}}</div>
                                 </div>
+                                {% endfor %}
 
                             </div>
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
