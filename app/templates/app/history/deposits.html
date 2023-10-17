@@ -39,12 +39,13 @@
                 {% for data in deposits %}
                 <tr>
                   <th scope="row">1</th>
-                  <td>001</td>
+                  <td>{{ forloop.counter0 }}</td>
                   <td>3RFGBNURTS89EGHBUI</td>
                   <td>100</td>
                   <td>0792613079</td>
                   <td><span class="badge bg-success">Approved</span></td>
                 </tr>
+                {% endfor %}
               </tbody>
             </table>
             <!-- End Default Table Example -->
