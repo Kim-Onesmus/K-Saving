@@ -138,9 +138,9 @@ def Logout(request):
 
 
 def getAccessToken(request):
-    consumer_key = ''
-    consumer_secret = ''
-    api_URL = ''
+    consumer_key = 'gvmRX9peDcWeYTRRHBrOZh42jITwtl4N'
+    consumer_secret = 'Vsmx9HaLqGPdAhPQ'
+    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
     r = request.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
     mpesa_access_toke = json.loads(r.text)
@@ -169,11 +169,12 @@ def Deposit(request):
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
-            deposit = Deposit.objects.create(
+            deposit = Pay.objects.create(
                 client=user.client,
                 amount=amount,
-                phone_number=number,
+                number=number,
             )
+            deposit.save()
             response = requests.post(api_url, json=payload, headers=headers)
             messages.success(request, 'Submitted successfully')
             return redirect('deposit')
