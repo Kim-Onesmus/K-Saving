@@ -94,35 +94,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                <form method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Select
-                                            Plan</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            {{form.plan}}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Amount per
-                                            plan</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            {{form.amount}}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Target</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            {{form.target}}
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
-                                </form><!-- End Profile Edit Form -->
+                                <!-- End Profile Edit Form -->
                             </div>
                         </div><!-- End Bordered Tabs -->
                     </div>
@@ -274,45 +246,35 @@
                             </div>
                             <div class="tab-pane fade" id="contact-justified" role="tabpanel"
                                 aria-labelledby="contact-tab">
-                                <b>Flexible Saving Plans:</b> We offer flexible savings plans that allow you to choose
-                                the amount you want to save daily, weekly, or monthly. Whether you're saving for a
-                                vacation, a new home, or a rainy day, our plans can be tailored to your needs.
-                                <br><br>
-
-                                <b>User-Friendly Interface:</b> Our user-friendly platform makes it easy to set up and
-                                track your savings progress. You can view your savings history, adjust your goals, and
-                                monitor your success with just a few clicks.
-
-                                <br><br>
-                                <b>Secure and Reliable:</b> Your financial security is our top priority. We use
-                                state-of-the-art security measures to protect your data and ensure a safe and reliable
-                                savings experience.
-
-                                <br><br>
-                                <b>Dedicated Support:</b> Our customer support team is here to assist you every step of
-                                the way. If you have questions or need assistance, don't hesitate to reach out to our
-                                friendly team.
-                            </div>
-                            <div class="tab-pane fade" id="team-justified" role="tabpanel"
-                                aria-labelledby="team-tab">
-
-                                <div class="card">
-                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                                        <img src="{{ user.client.profile_picture.url }}" alt="Profile"
-                                            class="rounded-circle">
-                                        <h2>{{user.first_name}} {{user.last_name}}</h2>
-                                        <h3>{{user.username}}</h3>
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row mb-3">
+                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Select
+                                            Plan</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.plan}}
+                                        </div>
                                     </div>
-                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                                        <img src="{{ user.client.profile_picture.url }}" alt="Profile"
-                                            class="rounded-circle">
-                                        <h2>{{user.first_name}} {{user.last_name}}</h2>
-                                        <h3>{{user.username}}</h3>
+                                    <div class="row mb-3">
+                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Amount per
+                                            plan</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.amount}}
+                                        </div>
                                     </div>
-                                </div>
 
+                                    <div class="row mb-3">
+                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Target</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{form.target}}
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
                             </div>
                         </div><!-- End Default Tabs -->
                     </div>
