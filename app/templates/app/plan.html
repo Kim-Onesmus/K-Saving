@@ -213,66 +213,64 @@
                             </div>
                             <div class="tab-pane fade" id="profile-justified" role="tabpanel"
                                 aria-labelledby="profile-tab">
-                                <form method="post" enctype="multipart/form-data"
-                                class="row g-3 needs-validation">
-                                {% csrf_token %}
-                                <div class="col-12">
-                                    <label for="" class="form-label">Select plan</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text"
-                                            id="inputGroupPrepend">Select</span>
-                                        <select name="plan" class="form-control"
-                                            id="yourPassword" required>
-                                            <option value="">Select your plan................
-                                            </option>
-                                            <option value="daily">Daily</option>
-                                            <option value="weekly">Weekly</option>
-                                            <option value="monthly">Monthly</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select a plan.
+                                <form method="post" enctype="multipart/form-data" class="row g-3 needs-validation">
+                                    {% csrf_token %}
+                                    <div class="col-12">
+                                        <label for="" class="form-label">Select plan</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"
+                                                id="inputGroupPrepend">Select</span>
+                                            <select name="plan" class="form-control"
+                                                id="yourPassword" required>
+                                                <option value="">Select your plan................
+                                                </option>
+                                                <option value="daily">Daily</option>
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                            </select>
+                                            <div class="invalid-feedback">Please select a plan.
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12">
-                                    <label for="yourUsername" class="form-label"
-                                        style="color: red;">*Select your plan first*</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text"
-                                            id="inputGroupPrepend">KSH</span>
-                                        <input type="number" name="amount" class="form-control"
-                                            id="yourUsername" placeholder="Amount" required>
-                                        <div class="invalid-feedback">Please enter your
-                                            plan target.</div>
+                                    <div class="col-12">
+                                        <label for="yourUsername" class="form-label"
+                                            style="color: red;">*Select your plan first*</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"
+                                                id="inputGroupPrepend">KSH</span>
+                                            <input type="number" name="amount" class="form-control"
+                                                id="yourUsername" placeholder="Amount" required>
+                                            <div class="invalid-feedback">Please enter your
+                                                plan target.</div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-12">
-                                    <label for="" class="form-label">Target</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text"
-                                            id="inputGroupPrepend">KSH</span>
-                                        <input type="number" name="target" class="form-control"
-                                            id="yourUsername" placeholder="Amount" required>
-                                        <div class="invalid-feedback">Please enter the amount to
-                                            deposit.</div>
+                                    <div class="col-12">
+                                        <label for="" class="form-label">Target</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"
+                                                id="inputGroupPrepend">KSH</span>
+                                            <input type="number" name="target" class="form-control"
+                                                id="yourUsername" placeholder="Amount" required>
+                                            <div class="invalid-feedback">Please enter the amount to
+                                                deposit.</div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox"
-                                            name="remember" value="true" id="rememberMe"
-                                            required>
-                                        <label class="form-check-label"
-                                            for="rememberMe">Confirm</label>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                name="remember" value="true" id="rememberMe"
+                                                required>
+                                            <label class="form-check-label"
+                                                for="rememberMe">Confirm</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-primary w-100"
-                                        type="submit">Submit</button>
-                                </div>
-                            </form>
-
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100"
+                                            type="submit">Submit</button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="tab-pane fade" id="contact-justified" role="tabpanel"
                                 aria-labelledby="contact-tab">
