@@ -47,7 +47,7 @@ def MyPlan(request):
     else:
         return render(request, 'app/plan.html') 
     
-    plan = My_Plan.objects.get(client=client)
+    plan = My_Plan.objects.all()
     context = {'form':form, 'existing_pan':existing_plan, 'plan':plan}
     return render(request, 'app/plan.html', context)
 
