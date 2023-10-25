@@ -1,142 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
 {% load static %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<main id="main" class="main">
-
-    <div class="pagetitle">
-        <h1>My Plan</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="breadcrumb-item active">My Plan</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
-    {% for data in messages %}
-    <p style="color: red;">{{data}}</p>
-    {% endfor %}
-    <section class="section profile">
-        <div class="row">
-            <div class="col-xl-8">
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab"
-                                    data-bs-target="#profile-change-password">My Plan</button>
-                            </li>
-
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#profile-overview">Make Plan</button>
-                            </li>
-
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                    Plan</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content pt-2">
-                            <div class="tab-pane fade show active profile-overview" id="profile-change-password">
-                                <h5 class="card-title">Plan Details</h5>
-                                {% for data in plan %}
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">My Plan</div>
-                                    <div class="col-lg-9 col-md-8">{{data.plan}}</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Amount </div>
-                                    <div class="col-lg-9 col-md-8">{{user.amount}}</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Target</div>
-                                    <div class="col-lg-9 col-md-8">{{user.username}}</div>
-                                </div>
-                                {% endfor %}
-
-                            </div>
-                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div
-                                            class="col-lg-7 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                                            <div id="floating">
-                                                {% for message in messages %}
-                                                <div class="alert {{message.tags}} alert-dismissible" role="alert">
-                                                    <button type="submit" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                    {{message | safe}}
-                                                </div>
-                                                {% endfor %}
-                                            </div>
-                                            <div class="card mb-3">
-
-                                                <div class="card-body">
-
-                                                    <div class="pt-4 pb-2">
-                                                        <h5 class="card-title text-center pb-0 fs-4">
-                                                            Create a plan</h5>
-                                                        <p class="text-center small">Fill the form to create a plan</p>
-                                                    </div>
-
-                                                   
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                <!-- End Profile Edit Form -->
-                            </div>
-                        </div><!-- End Bordered Tabs -->
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-</main>
-<script>
-    $(document).ready(function () {
-        $('#yourPassword').change(function () {
-            var selectedPlan = $(this).val();
-            var depositLabel = '';
-            var depositPlaceholder = '';
-            var depositValidationMessage = '';
-
-            if (selectedPlan === 'daily') {
-                depositLabel = 'Daily Amount to save';
-                depositPlaceholder = 'Amount to save daily';
-                depositValidationMessage = 'Please enter the amount to save daily.';
-            } else if (selectedPlan === 'weekly') {
-                depositLabel = 'Weekly Amount to save';
-                depositPlaceholder = 'Amount to save weekly';
-                depositValidationMessage = 'Please enter the amount to save weekly.';
-            } else if (selectedPlan === 'monthly') {
-                depositLabel = 'Monthly Amount to save';
-                depositPlaceholder = 'Amount to save monthly';
-                depositValidationMessage = 'Please enter the amount to save monthly.';
-            }
-
-            $('label[for="yourUsername"]').text(depositLabel);
-            $('#yourUsername').attr('placeholder', depositPlaceholder);
-            $('#yourUsername').siblings('.invalid-feedback').text(depositValidationMessage);
-        });
-    });
-</script>
-{% endblock content %}
-{% extends 'main.html' %}
-{% block content %}
-{% load static %}
 
 <main id="main" class="main">
     <div class="pagetitle">
@@ -144,7 +8,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="breadcrumb-item">About us</li>
+                <li class="breadcrumb-item">My Plan</li>
             </ol>
         </nav>
     </div>
@@ -178,10 +42,24 @@
                         <div class="tab-content pt-2" id="myTabjustifiedContent">
                             <div class="tab-pane fade show active" id="home-justified" role="tabpanel"
                                 aria-labelledby="home-tab">
-                                At K-Save, we're passionate about helping you achieve your savings goals.
-                                We understand that saving money can be challenging, but with the right tools and a clear
-                                plan,
-                                anyone can build a brighter financial future.
+                                <div class="row mb-3">
+                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Plan :</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {{form.target}}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Amount :</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {{form.target}}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Target :</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {{form.target}}
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="profile-justified" role="tabpanel"
                                 aria-labelledby="profile-tab">
@@ -283,5 +161,32 @@
         </div>
     </section>
 </main>
+<script>
+    $(document).ready(function () {
+        $('#yourPassword').change(function () {
+            var selectedPlan = $(this).val();
+            var depositLabel = '';
+            var depositPlaceholder = '';
+            var depositValidationMessage = '';
 
+            if (selectedPlan === 'daily') {
+                depositLabel = 'Daily Amount to save';
+                depositPlaceholder = 'Amount to save daily';
+                depositValidationMessage = 'Please enter the amount to save daily.';
+            } else if (selectedPlan === 'weekly') {
+                depositLabel = 'Weekly Amount to save';
+                depositPlaceholder = 'Amount to save weekly';
+                depositValidationMessage = 'Please enter the amount to save weekly.';
+            } else if (selectedPlan === 'monthly') {
+                depositLabel = 'Monthly Amount to save';
+                depositPlaceholder = 'Amount to save monthly';
+                depositValidationMessage = 'Please enter the amount to save monthly.';
+            }
+
+            $('label[for="yourUsername"]').text(depositLabel);
+            $('#yourUsername').attr('placeholder', depositPlaceholder);
+            $('#yourUsername').siblings('.invalid-feedback').text(depositValidationMessage);
+        });
+    });
+</script>
 {% endblock content %}
