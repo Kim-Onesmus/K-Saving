@@ -19,7 +19,7 @@ def Index(request):
 def MyPlan(request):
     user = request.user
     client = user.client
-    existing_plan = My_Plan.objects.filter(client=client)
+    existing_plan = My_Plan.objects.filter(client=client).first()
     form = My_PlanForm(instance=existing_plan)
     
     if request.method == 'POST':
