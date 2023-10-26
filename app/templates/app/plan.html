@@ -38,10 +38,11 @@
                         <div class="tab-content pt-2" id="myTabjustifiedContent">
                             <div class="tab-pane fade show active" id="home-justified" role="tabpanel"
                                 aria-labelledby="home-tab">
+                                {% for data in existing_plan %}
                                 <div class="row mb-3">
                                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Plan :</label>
                                     <div class="col-md-8 col-lg-9">
-                                        {{client.myPlan.plan}}
+                                        {{data.plan}}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -56,6 +57,7 @@
                                         {{data.target}}
                                     </div>
                                 </div>
+                                {% endfor %}
                             </div>
                             <div class="tab-pane fade" id="profile-justified" role="tabpanel"
                                 aria-labelledby="profile-tab">
