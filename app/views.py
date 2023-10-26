@@ -47,8 +47,8 @@ def MyPlan(request):
     else:
         return render(request, 'app/plan.html') 
     
-    plan = My_Plan.objects.all()
-    context = {'form':form, 'existing_pan':existing_plan, 'plan':plan}
+    myPlan = My_Plan.objects.all()
+    context = {'form':form, 'existing_pan':existing_plan, 'myPlan':myPlan}
     return render(request, 'app/plan.html', context)
 
 def Register(request):
