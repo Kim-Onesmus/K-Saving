@@ -279,68 +279,59 @@
   message_ele.style.display = "none"
   }, 30000);
   </script>
-<script>
-  // setup chat scoket
-  const notifyScoket = new WebSocket(
-    'ws://'
-    + window.location.host
-    + '/ws/notify/'
-  );
+  <script>
+    // setup chat scoket
+    const notifyScoket = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/notify/'
+    );
 
-  // on socket open
-  notifyScoket.onopen = function (e) {
-    console.log('Socket successfully connected.');
-  };
+    // on socket open
+    notifyScoket.onopen = function (e) {
+      console.log('Socket successfully connected.');
+    };
 
-  // on socket close
-  notifyScoket.onclose = function (e) {
-    console.log('Socket closed unexpectedly');
-  };
+    // on socket close
+    notifyScoket.onclose = function (e) {
+      console.log('Socket closed unexpectedly');
+    };
 
-  // on receiving message on group
-  notifyScoket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    const message = data.message;
-    const timestamp = new Date().toLocaleString(); // Get current date and time
-    // Call the setMessage function to add the new li element
-    setMessage(message, timestamp);
-  };
+    // on receiving message on group
+    notifyScoket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      const message = data.message;
+      // Call the setMessage function to add the new li element
+      setMessage(message);
 
-  function setMessage(message, timestamp) {
-    // Get the ul element with the id "notify"
-    var ulElement = document.getElementById('notify');
+    };
 
-    // Create a new li element
+    function setMessage(message) {
+      // Create a new li element
+      var newLi = document.createElement('li');
 
-    // Create a new anchor element
-    var newAnchor = document.createElement('a');
-    newAnchor.className = 'dropdown-item text-wrap';
-    newAnchor.href = '#';
-    newAnchor.textContent = message;
+      // Create a new anchor element
+      var newAnchor = document.createElement('a');
+      newAnchor.className = 'dropdown-item text-wrap';
+      newAnchor.href = '#';
+      newAnchor.textContent = message;
 
-    // Create a paragraph element for the timestamp
-    var timestampElement = document.createElement('p');
-    timestampElement.textContent = 'Received at: ' + timestamp;
+      // Append the anchor element to the li element
+      newLi.appendChild(newAnchor);
 
-    // Append the icon, anchor, and timestamp elements to the new li element
-    newLi.appendChild(icon);
-    newLi.appendChild(newAnchor);
-    newLi.appendChild(timestampElement);
+      // Get the ul element with the id "notify"
+      var ulElement = document.getElementById('notify');
 
-    // Append the new li element to the ul element
-    ulElement.appendChild(newLi);
+      // Append the new li element to the ul element
+      ulElement.appendChild(newLi);
 
-    // Create a horizontal line (hr) element
-    var divider = document.createElement('hr');
+      // getting object of count
+      count = document.getElementById('bellCount').getAttribute('data-count');
+      document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
+    }
 
-    // Append the horizontal line to the ul element
-    ulElement.appendChild(divider);
 
-    // getting object of count
-    count = document.getElementById('bellCount').getAttribute('data-count');
-    document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
-  }
-</script>
+  </script>
 
 
 
