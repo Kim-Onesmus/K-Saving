@@ -179,7 +179,7 @@ def Deposit(request):
             messages.success(request, 'Submitted successfully')
             return redirect('deposit')
         else:
-            messages.error(request, f"Phone number '{number}' is not valid or wron format")
+            messages.error(request, f"Phone number '{number}' is not valid or wrong format")
             return redirect('deposit')
     else:
         return render(request, 'app/transaction/deposit.html')
