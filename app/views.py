@@ -171,14 +171,19 @@ def Deposit(request):
             }
             response = requests.post(api_url, json=payload, headers=headers)
             if response.status_code == 200:
-                deposit = Pay.objects.create(
-                    client=user.client,
-                    amount=amount,
-                    number=number,
-                )
-                deposit.save()
-                messages.success(request, 'Submitted successfully')
-                return redirect('deposit')
+                mpesa_response = response.json()
+                if 'ResultCode' in mpesa_response and mpesa_response['ResultCode'] == '0':
+                    deposit = Pay.objects.create(
+                        client=user.client,
+                        amount=amount,
+                        number=number,
+                    )
+                    deposit.save()
+                    messages.success(request, 'Submitted successfully')
+                    return redirect('deposit')
+                else:
+                    # Handle cases where the STK push failed
+                    messages.error(request, f'STK Push failed: {mpesa_response["ResultDesc"]}')
             else:
                 messages.error(request, 'M-pesa API call failed')
                 return redirect('deposit')
