@@ -20,7 +20,8 @@ def Deposit(request):
                 mpesa_response = response.json()
 
                 # Check if the STK push was successful
-                if 'ResultCode' in mpesa_response and mpesa_response['ResultCode'] == '0':
+                result_code = mpesa_response.get('ResultCode', '')
+                if result_code == '0':
                     # Save the Pay and MpesaPayment models if the STK push is successful
                     deposit = Pay.objects.create(
                         client=user.client,
@@ -45,7 +46,8 @@ def Deposit(request):
                     messages.success(request, 'STK Push successful')
                 else:
                     # Handle cases where the STK push failed
-                    messages.error(request, f'STK Push failed: {mpesa_response["ResultDesc"]}')
+                    error_message = mpesa_response.get('ResultDesc', 'Unknown error')
+                    messages.error(request, f'STK Push failed: {error_message}')
             else:
                 messages.error(request, 'M-Pesa API call failed')
                 

@@ -183,7 +183,7 @@ def Deposit(request):
                     return redirect('deposit')
                 else:
                     # Handle cases where the STK push failed
-                    messages.error(request, f'STK Push failed: {mpesa_response["ResultDesc"]}')
+                    messages.error(request, 'Request failed')
             else:
                 messages.error(request, 'M-pesa API call failed')
                 return redirect('deposit')
