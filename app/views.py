@@ -138,8 +138,8 @@ def Logout(request):
 
 
 def getAccessToken(request):
-    consumer_key = 'gvmRX9peDcWeYTRRHBrOZh42jITwtl4N'
-    consumer_secret = 'Vsmx9HaLqGPdAhPQ'
+    consumer_key = 'AMOetkruFwpNeGQrnfQYMWbq1qyM5Iad'
+    consumer_secret = 'vHwWTtUKqYdovT2A'
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
     r = request.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
@@ -165,19 +165,23 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+                "CallBackURL": 'https://api.darajambili.com/express-payment',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
-            deposit = Pay.objects.create(
-                client=user.client,
-                amount=amount,
-                number=number,
-            )
-            deposit.save()
             response = requests.post(api_url, json=payload, headers=headers)
-            messages.success(request, 'Submitted successfully')
-            return redirect('deposit')
+            if response.status_code == 200:
+                deposit = Pay.objects.create(
+                    client=user.client,
+                    amount=amount,
+                    number=number,
+                )
+                deposit.save()
+                messages.success(request, 'Submitted successfully')
+                return redirect('deposit')
+            else:
+                messages.error(request, 'M-pesa API call failed')
+                return redirect('deposit')
         else:
             messages.error(request, f"Phone number '{number}' is not valid or wrong format")
             return redirect('deposit')
