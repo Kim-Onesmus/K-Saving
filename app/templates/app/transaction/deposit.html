@@ -36,7 +36,6 @@
                   <h5 class="card-title text-center pb-0 fs-4">Deposit/Save</h5>
                   <p class="text-center small">Enter your phone number & amount to save</p>
                 </div>
-
                 <form method="post" enctype="multipart/form-data" class="row g-3 needs-validation">
                   {% csrf_token %}
 
@@ -44,7 +43,8 @@
                     <label for="yourUsername" class="form-label">Phone number</label>
                     <div class="input-group has-validation">
                       <!-- <span class="input-group-text" id="inputGroupPrepend">+254</span> -->
-                      <input type="number" name="number" class="form-control" id="yourUsername" placeholder="2547......." required>
+                      <input type="number" name="number" class="form-control" id="yourUsername"
+                        placeholder="2547......." required>
                       <div class="invalid-feedback">Please enter your phone number.</div>
                     </div>
                   </div>
