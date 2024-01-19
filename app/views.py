@@ -153,10 +153,12 @@ def Deposit(request):
         number = request.POST['number']
         amount = request.POST['amount']
         user = request.user
+
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
             access_token = MpesaAccessToken.validated_mpesa_access_token
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
             headers = {"Authorization": "Bearer %s" % access_token}
+
             payload = {
                 "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
                 "Password": LipanaMpesaPpassword.decode_password,
@@ -166,14 +168,15 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://api.darajambili.com/express-payment',
+                "CallBackURL": 'https://darajambili.herokuapp.com/c2b/confirmation',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
+
             response = requests.post(api_url, json=payload, headers=headers)
-            
+            print(response)
+
             if response.status_code == 200:
-                messages.info(request, 'Success. Request accepted for processing')
                 mpesa_response = response.json()
                 if 'ResultCode' in mpesa_response and mpesa_response['ResultCode'] == '0':
                     deposit = Pay.objects.create(
@@ -182,20 +185,18 @@ def Deposit(request):
                         number=number,
                     )
                     deposit.save()
-                    # messages.success(request, 'Submitted successfully')
+                    messages.success(request, 'Deposit successful')
                     return redirect('deposit')
                 else:
-                    # Print the response content for troubleshooting
-                    print(response.content)
-                    messages.error(request, 'Request failed')
+                    # Handle the case where the STK push request was canceled or failed
+                    messages.error(request, 'STK push request failed')
             else:
-                # Print the response content for troubleshooting
-                print(response.content)
-                messages.error(request, 'M-pesa API call failed')
-                return redirect('deposit')
+                # Handle the case where the API call failed
+                messages.error(request, 'M-Pesa API call failed')
         else:
-            messages.error(request, f"Phone number '{number}' is not valid or wrong format")
-            return redirect('deposit')
+            messages.error(request, f"Phone number '{number}' is not valid or in the wrong format")
+        
+        return redirect('deposit')
     else:
         return render(request, 'app/transaction/deposit.html')
     return render(request, 'app/transaction/deposit.html')
