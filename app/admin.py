@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment, My_Plan
+from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment, My_Plan, BaseModel, MpesaCalls, MpesaCallBacks
 
 # Register your models here.
 @admin.register(Client)
@@ -28,3 +28,7 @@ class WithdrawTable(admin.ModelAdmin):
 @admin.register(My_Plan)
 class My_PlanTable(admin.ModelAdmin):
     list_display = ('plan', 'amount', 'target')
+
+
+
+admin.site.register()

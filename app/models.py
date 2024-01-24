@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .utils import generate_default_profile_picture
-from django.core.validators import MinValueValidator
 from django.conf import settings
 import os
 # Create your models here.
@@ -124,23 +123,4 @@ class Withdraw(models.Model):
     def __str__(self):
         return self.number
 
-
-
-class AbstractBaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-class MpesaResponseBody(AbstractBaseModel):
-    body = models.JSONField()
-
-
-class Transaction(AbstractBaseModel):
-    phonenumber = models.CharField(max_length=100)
-    amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    receipt_no = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.receipt_no
+        
