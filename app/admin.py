@@ -32,5 +32,5 @@ class My_PlanTable(admin.ModelAdmin):
 
 
 # admin.site.register('BaseModel')
-admin.site.register(MpesaCalls)
-admin.site.register(MpesaCallBacks)
+# admin.site.register(MpesaCalls)
+# admin.site.register(MpesaCallBacks)
