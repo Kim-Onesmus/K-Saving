@@ -169,7 +169,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://darajambili.herokuapp.com/c2b/confirmation',
+                "CallBackURL": request.build_absolute_uri(reverse('callback')),
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
