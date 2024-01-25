@@ -27,11 +27,11 @@ SECRET_KEY = 'django-insecure-v37i%tt#3g_j_xy9z03+jz%ay#j936flo&pg@z3(f!dk9qd)ya
 DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
+    # 'http://localhost:8000',
     'https://eed6-105-160-100-159.ngrok-free.app'
 ],
 ALLOWED_HOSTS = [
-    'localhost',
+    # 'localhost',
     'https://eed6-105-160-100-159.ngrok-free.app'
 ],
 # CORS_ORIGIN_WHITELIST = [
