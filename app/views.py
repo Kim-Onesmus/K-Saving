@@ -11,7 +11,10 @@ import requests
 from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay
 from . forms import ClientForm, My_PlanForm
 from django.urls import reverse
-
+from django.forms.models import model_to_dict
+from rest_framework import views, response, status
+from .serializers import MpesaResponseBodySerializer, TransactionSerializer
+from .models import MpesaResponseBody, Transaction
 
 def Index(request):
     return render(request, 'app/index.html')
@@ -169,7 +172,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": request.build_absolute_uri(reverse('callback')),
+                "CallBackURL": 'https://eed6-105-160-100-159.ngrok-free.app',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
@@ -291,12 +294,6 @@ def Notification(request):
 
 
 # CREATING A CALLBACK URL
-
-from django.forms.models import model_to_dict
-from rest_framework import views, response, status
-
-from .serializers import MpesaResponseBodySerializer, TransactionSerializer
-from .models import MpesaResponseBody, Transaction
 
 class MpesaCallbackView(views.APIView):
     def post(self, request, format=None):
