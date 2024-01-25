@@ -304,12 +304,12 @@ def Notification(request):
 class MpesaCallbackView(views.APIView):
     def post(self, request, format=None):
         body = request.data
+        print(body)
 
         if body:
             mpesa = MpesaResponseBody.objects.create(body=body)
 
             mpesa_body = mpesa.body
-            print(mpesa_body)
 
             if mpesa_body['stkCallback']['ResultCode'] == 0:
                 transaction = Transaction.objects.create(
