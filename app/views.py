@@ -15,6 +15,8 @@ from django.forms.models import model_to_dict
 from rest_framework import views, response, status
 from .serializers import MpesaResponseBodySerializer, TransactionSerializer
 from .models import MpesaResponseBody, Transaction
+from django.views.decorators.csrf import csrf_exempt
+
 
 def Index(request):
     return render(request, 'app/index.html')
@@ -90,6 +92,8 @@ def Register(request):
         return render(request, 'app/account/register.html')
     return render(request, 'app/account/register.html')
 
+
+@csrf_exempt
 def Login(request):
     if request.method == 'POST':
         username = request.POST['username']
