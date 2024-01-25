@@ -29,13 +29,7 @@ DEBUG = True
 CSRF_TRUSTED_ORIGINS = [
     'https://eed6-105-160-100-159.ngrok-free.app'
 ],
-ALLOWED_HOSTS = [
-    'localhost',
-    'https://eed6-105-160-100-159.ngrok-free.app'
-],
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:8000',
-# ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
