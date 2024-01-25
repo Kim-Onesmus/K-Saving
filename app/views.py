@@ -155,7 +155,7 @@ def getAccessToken(request):
     validated_mpesa_access_token = mpesa_access_toke['access_token']
     return HttpResponse(validated_mpesa_access_token)
 
-
+@csrf_exempt
 def Deposit(request):
     if request.method == 'POST':
         number = request.POST['number']
@@ -176,10 +176,11 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://eed6-105-160-100-159.ngrok-free.app',
+                "CallBackURL": 'https://eed6-105-160-100-159.ngrok-free.app/callback/',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
+            print(payload)
 
             response = requests.post(api_url, json=payload, headers=headers)
             print(response)
@@ -255,6 +256,7 @@ def confirmation(request):
         organization_balance=mpesa_payment['OrgAccountBalance'],
         type=mpesa_payment['TransactionType'],
     )
+    print(payment)
     payment.save()
     context = {
         "ResultCode": 0,
@@ -307,6 +309,7 @@ class MpesaCallbackView(views.APIView):
             mpesa = MpesaResponseBody.objects.create(body=body)
 
             mpesa_body = mpesa.body
+            print(mpesa_body)
 
             if mpesa_body['stkCallback']['ResultCode'] == 0:
                 transaction = Transaction.objects.create(
@@ -314,7 +317,7 @@ class MpesaCallbackView(views.APIView):
                     amount=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][0]["Value"],
                     receipt_no=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][1]["Value"]
                 )
-
+                
             return response.Response({"message": "Callback Data received and processed successfully."})
         return response.Response({"failed": "No Callback Data Received"}, status=status.HTTP_400_BAD_REQUEST)
     
