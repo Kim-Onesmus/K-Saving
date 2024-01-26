@@ -176,7 +176,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://eed6-105-160-100-159.ngrok-free.app/callback/',
+                "CallBackURL": request.build_absolute_uri(reverse('callback')),
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
