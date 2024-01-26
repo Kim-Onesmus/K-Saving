@@ -176,7 +176,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": request.build_absolute_uri(reverse('callback')),
+                "CallBackURL": 'https://smartsaver.pythonanywhere.com/callback/',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
