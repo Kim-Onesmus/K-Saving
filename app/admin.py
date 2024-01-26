@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment, My_Plan, BaseModel, MpesaCalls, MpesaCallBacks
+from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment, My_Plan, BaseModel, MpesaCalls, MpesaCallBacks, MpesaResponseBody, Transaction
 
 # Register your models here.
 @admin.register(Client)
@@ -31,6 +31,6 @@ class My_PlanTable(admin.ModelAdmin):
 
 
 
-# admin.site.register('BaseModel')
-# admin.site.register(MpesaCalls)
+admin.site.register(MpesaResponseBody)
+admin.site.register(Transaction)
 # admin.site.register(MpesaCallBacks)
