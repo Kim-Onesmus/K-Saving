@@ -155,7 +155,7 @@ def getAccessToken(request):
     validated_mpesa_access_token = mpesa_access_toke['access_token']
     return HttpResponse(validated_mpesa_access_token)
 
-
+@csrf_exempt
 def Deposit(request):
     if request.method == 'POST':
         number = request.POST['number']
@@ -312,7 +312,7 @@ class MpesaCallbackView(views.APIView):
             mpesa_body = mpesa.body
             print(mpesa_body)
 
-            if 'stkCallback' in mpesa_body and mpesa_body['stkCallback']['ResultCode'] == 0:
+            if mpesa_body['stkCallback']['ResultCode'] == 0:
                 transaction = Transaction.objects.create(
                     phonenumber=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][-1]["Value"],
                     amount=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][0]["Value"],
@@ -327,7 +327,6 @@ class MpesaCallbackView(views.APIView):
         serializer = MpesaResponseBodySerializer(response_bodies, many=True)
 
         return response.Response({"responses": serializer.data})
-
 
 
 class TransactionView(views.APIView):
