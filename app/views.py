@@ -312,7 +312,9 @@ class MpesaCallbackView(views.APIView):
             mpesa_body = mpesa.body
             print(mpesa_body)
 
-            if mpesa_body['stkCallback']['ResultCode'] == 0:
+            # Check if 'stkCallback' is present in mpesa_body
+            if 'stkCallback' in mpesa_body and mpesa_body['stkCallback']['ResultCode'] == 0:
+                # Access 'stkCallback' and perform further processing
                 transaction = Transaction.objects.create(
                     phonenumber=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][-1]["Value"],
                     amount=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][0]["Value"],
@@ -327,6 +329,7 @@ class MpesaCallbackView(views.APIView):
         serializer = MpesaResponseBodySerializer(response_bodies, many=True)
 
         return response.Response({"responses": serializer.data})
+
 
 
 class TransactionView(views.APIView):
