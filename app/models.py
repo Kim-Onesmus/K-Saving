@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .utils import generate_default_profile_picture
+from django.core.validators import MinValueValidator
 from django.conf import settings
 import os
 # Create your models here.
@@ -123,10 +124,6 @@ class Withdraw(models.Model):
     def __str__(self):
         return self.number
 
-        
-# CREATING CALLBACK URL
-
-from django.core.validators import MinValueValidator
 
 class AbstractBaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
