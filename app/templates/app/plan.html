@@ -38,25 +38,27 @@
                         <div class="tab-content pt-2" id="myTabjustifiedContent">
                             <div class="tab-pane fade show active" id="home-justified" role="tabpanel"
                                 aria-labelledby="home-tab">
-                                {% if existing_plan %}
+                                {% if planings %}
+                                {% for plan in planings %}
                                 <div class="row mb-3">
                                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Plan :</label>
                                     <div class="col-md-8 col-lg-9">
-                                        {{existing_plan.plan}}
+                                        {{plan.plan}}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Amount :</label>
                                     <div class="col-md-8 col-lg-9">
-                                        {{existing_plan.amount}}
+                                        {{plan.amount}}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Target :</label>
                                     <div class="col-md-8 col-lg-9">
-                                        {{existing_plan.target}}
+                                        {{plan.target}}
                                     </div>
                                 </div>
+                                {% endfor %}
                                 {% endif %}
                             </div>
                             <div class="tab-pane fade" id="profile-justified" role="tabpanel"

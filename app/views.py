@@ -38,18 +38,17 @@ def MyPlan(request):
             if existing_plan:
                 messages.error(request, 'You already have an active plan.')
                 return redirect('my_plan')
-            
             else:
                 new_plan = My_Plan(client=client, plan=plan, amount=amount, target=target)
                 new_plan.save()
 
                 messages.success(request, 'Plan saved successfully.')
                 return redirect('my_plan')
-            
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Plan edited successfully')
-            return redirect('my_plan')   
+        if form:
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Plan edited successfully')
+                return redirect('my_plan')   
     else:
         # Fix: Use My_Plan.objects.filter(client=client) to get all plans for the logged-in user
         planings = My_Plan.objects.filter(client=client)
