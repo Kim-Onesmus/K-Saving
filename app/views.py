@@ -25,7 +25,7 @@ def Index(request):
 def MyPlan(request):
     user = request.user
     client = user.client
-    existing_plan = My_Plan.objects.filter(client=client).first
+    existing_plan = My_Plan.objects.filter(client=client).first()
     form = My_PlanForm(instance=existing_plan)
     
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def MyPlan(request):
     else:
         return render(request, 'app/plan.html') 
     
-    planings = My_Plan.objects.all()
+    planings = My_Plan.objects.filter(client=client)
     context = {'form':form, 'existing_pan':existing_plan, 'planings':planings}
     return render(request, 'app/plan.html', context)
 
