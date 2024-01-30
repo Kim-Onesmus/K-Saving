@@ -53,8 +53,8 @@ def MyPlan(request):
     else:
         return render(request, 'app/plan.html') 
     
-    planings = My_Plan.objects.filter(client=client)
-    context = {'form':form, 'existing_pan':existing_plan, 'planings':planings}
+    all_planning = My_Plan.objects.filter(client=client)
+    context = {'form':form, 'existing_pan':existing_plan, 'all_planning':all_planning}
     return render(request, 'app/plan.html', context)
 
 def Register(request):
