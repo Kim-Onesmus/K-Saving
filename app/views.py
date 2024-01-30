@@ -51,11 +51,10 @@ def MyPlan(request):
             messages.info(request, 'Plan edited successfully')
             return redirect('my_plan')   
     else:
-        return render(request, 'app/plan.html') 
-    
-    all_planning = My_Plan.objects.filter(client=client)
-    context = {'form':form, 'existing_pan':existing_plan, 'all_planning':all_planning}
-    return render(request, 'app/plan.html', context)
+        # Fix: Use My_Plan.objects.filter(client=client) to get all plans for the logged-in user
+        planings = My_Plan.objects.filter(client=client)
+        context = {'form': form, 'existing_plan': existing_plan, 'planings': planings}
+        return render(request, 'app/plan.html', context)
 
 def Register(request):
     if request.method == 'POST':
