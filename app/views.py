@@ -33,7 +33,6 @@ def MyPlan(request):
         amount = request.POST['amount']
         target = request.POST['target']
         
-        form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
         if plan and amount and target:
             if existing_plan:
                 messages.error(request, 'You already have an active plan.')
@@ -44,13 +43,13 @@ def MyPlan(request):
 
                 messages.success(request, 'Plan saved successfully.')
                 return redirect('my_plan')
-        if form:
-            if form.is_valid():
-                form.save()
-                messages.info(request, 'Plan edited successfully')
-                return redirect('my_plan')   
+
+        form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Plan edited successfully')
+            return redirect('my_plan')   
     else:
-        # Fix: Use My_Plan.objects.filter(client=client) to get all plans for the logged-in user
         planings = My_Plan.objects.filter(client=client)
         context = {'form': form, 'existing_plan': existing_plan, 'planings': planings}
         return render(request, 'app/plan.html', context)
