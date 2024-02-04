@@ -185,7 +185,8 @@ def Deposit(request):
             if response.status_code == 200:
                 mpesa_response = response.json()
                 print('Mpesa Respons', mpesa_response)
-                if 'ResultCode' in mpesa_response and mpesa_response['ResultCode'] == '0':
+                #  and mpesa_response['ResultCode'] == '0'
+                if 'ResponseCode' in mpesa_response == '0':
                     deposit = Pay.objects.create(
                         client=user.client,
                         amount=amount,
