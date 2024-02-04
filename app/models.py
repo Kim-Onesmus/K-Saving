@@ -12,6 +12,12 @@ myPlan = [
     ('monthly','monthly'),
 ]
 
+withdraw_status = [
+    ('approved','approved'),
+    ('pending','pending'),
+    ('cancelled','cancelled'),
+]
+
 def user_profile_picture_path(instance, filename):
     # Generate a unique filename for the profile picture
     ext = filename.split('.')[-1]
@@ -120,6 +126,8 @@ class MpesaPayment(BaseModel):
     
     
 class Withdraw(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    status = models.CharField(max_length=200, choices=withdraw_status, default='pending')
     number = models.PositiveBigIntegerField(max_length=13)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     

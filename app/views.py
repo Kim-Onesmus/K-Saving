@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
-from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay
+from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw
 from . forms import ClientForm, My_PlanForm
 from django.urls import reverse
 from django.forms.models import model_to_dict
@@ -27,7 +27,7 @@ def Index(request):
     remaining_days = remaining/existings_plan.amount
 
 
-    context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining}
+    context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining, 'remaining_days':remaining_days}
     return render(request, 'app/index.html', context)
 
 
@@ -281,6 +281,7 @@ def confirmation(request):
     return JsonResponse(dict(context))
 
 def Withdraw(request):
+
     return render(request, 'app/transaction/withdraw.html')
 
 def Deposits(request):
@@ -292,6 +293,22 @@ def Deposits(request):
     return render(request, 'app/history/deposits.html', context)
 
 def Withdrawals(request):
+    client = request.user.client
+    existings_plan = My_Plan.objects.filter(client=client).first()
+    pays = Pay.objects.filter(client=client)
+    total_amount = sum(pay.amount for pay in pays)
+    remaining = existings_plan.target - total_amount
+    remaining_days = remaining/existings_plan.amount
+
+    if request.method == 'POST':
+        client = request.user
+        number = request.POST['number']
+        amount = request.POST['amount']
+
+        if remaining >= total_amount:
+            withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
+            withdraw_details.save
+            
     return render(request, 'app/history/withdraws.html')
 
 def Contact(request):
