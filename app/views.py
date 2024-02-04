@@ -173,7 +173,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://f046-105-160-81-102.ngrok-free.app/callback/',
+                "CallBackURL": 'https://30de-105-160-60-50.ngrok-free.app/callback/',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
