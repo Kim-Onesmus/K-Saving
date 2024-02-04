@@ -15,6 +15,16 @@
 
     <section class="section">
         <div class="row">
+            <div id="floating">
+                {% for message in messages %}
+                <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                    <button type="submit" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{message | safe}}
+                </div>
+                {% endfor %}
+            </div>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -68,10 +78,8 @@
                                     <div class="col-12">
                                         <label for="" class="form-label">Select plan</label>
                                         <div class="input-group has-validation">
-                                            <span class="input-group-text"
-                                                id="inputGroupPrepend">Select</span>
-                                            <select name="plan" class="form-control"
-                                                id="yourPassword" required>
+                                            <span class="input-group-text" id="inputGroupPrepend">Select</span>
+                                            <select name="plan" class="form-control" id="yourPassword" required>
                                                 <option value="">Select your plan................
                                                 </option>
                                                 <option value="daily">Daily</option>
@@ -83,13 +91,12 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label"
-                                            style="color: red;">*Select your plan first*</label>
+                                        <label for="yourUsername" class="form-label" style="color: red;">*Select your
+                                            plan first*</label>
                                         <div class="input-group has-validation">
-                                            <span class="input-group-text"
-                                                id="inputGroupPrepend">KSH</span>
-                                            <input type="number" name="amount" class="form-control"
-                                                id="yourUsername" placeholder="Amount" required>
+                                            <span class="input-group-text" id="inputGroupPrepend">KSH</span>
+                                            <input type="number" name="amount" class="form-control" id="yourUsername"
+                                                placeholder="Amount" required>
                                             <div class="invalid-feedback">Please enter your
                                                 plan target.</div>
                                         </div>
@@ -97,10 +104,9 @@
                                     <div class="col-12">
                                         <label for="" class="form-label">Target</label>
                                         <div class="input-group has-validation">
-                                            <span class="input-group-text"
-                                                id="inputGroupPrepend">KSH</span>
-                                            <input type="number" name="target" class="form-control"
-                                                id="yourUsername" placeholder="Amount" required>
+                                            <span class="input-group-text" id="inputGroupPrepend">KSH</span>
+                                            <input type="number" name="target" class="form-control" id="yourUsername"
+                                                placeholder="Amount" required>
                                             <div class="invalid-feedback">Please enter the amount to
                                                 deposit.</div>
                                         </div>
@@ -108,16 +114,13 @@
 
                                     <div class="col-12">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="remember" value="true" id="rememberMe"
-                                                required>
-                                            <label class="form-check-label"
-                                                for="rememberMe">Confirm</label>
+                                            <input class="form-check-input" type="checkbox" name="remember" value="true"
+                                                id="rememberMe" required>
+                                            <label class="form-check-label" for="rememberMe">Confirm</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button class="btn btn-primary w-100"
-                                            type="submit">Submit</button>
+                                        <button class="btn btn-primary w-100" type="submit">Submit</button>
                                     </div>
                                 </form>
                             </div>
