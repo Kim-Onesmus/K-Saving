@@ -28,6 +28,11 @@ def Index(request):
     remaining = existings_plan.target - total_amount
     remaining_days = remaining/existings_plan.amount
 
+    approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
+
+    # Deduct the withdrawal amounts from the total amount
+    for withdrawal in approved_withdrawals:
+        total_amount -= withdrawal.amount
 
     context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining, 'remaining_days':remaining_days}
     return render(request, 'app/index.html', context)
