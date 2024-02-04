@@ -67,7 +67,7 @@ class ContactUs(models.Model):
     
 class Pay(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    pay_id = models.AutoField(primary_key=True)
+    pay_id = models.BigAutoField(primary_key=True)
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
     number = models.PositiveBigIntegerField(max_length=13)
@@ -75,13 +75,11 @@ class Pay(models.Model):
 
 class Withdraw(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    withdraw_id = models.AutoField(primary_key=True)
+    withdraw_id = models.ABigAutoField(primary_key=True)
     status = models.CharField(max_length=200, choices=withdraw_status, default='pending')
     number = models.PositiveBigIntegerField(max_length=13)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     
-    def __str__(self):
-        return self.number
 
    
 class BaseModel(models.Model):
