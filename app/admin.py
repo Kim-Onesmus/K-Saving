@@ -14,7 +14,7 @@ class ContactUsTable(admin.ModelAdmin):
 
 @admin.register(Pay)
 class PayTable(admin.ModelAdmin):
-    list_display = ('client', 'amount', 'number', 'created_date', 'created_time')
+    list_display = ('client', 'pay_id', 'amount', 'number', 'created_date', 'created_time')
     
 @admin.register(MpesaPayment)
 class MpesaPaymentTable(admin.ModelAdmin):
@@ -22,7 +22,7 @@ class MpesaPaymentTable(admin.ModelAdmin):
  
 @admin.register(Withdraw)
 class WithdrawTable(admin.ModelAdmin):
-    list_display = ('number', 'amount')
+    list_display = ('client', 'withdraw_id', 'status', 'number', 'amount', )
     
     
 @admin.register(My_Plan)
