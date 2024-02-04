@@ -242,7 +242,7 @@ def WithdrawFunc(request):
         amount = request.POST['amount']
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
-            if total_amount >= remaining:
+            if total_amount <= remaining:
                 withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
                 withdraw_details.save()
 
@@ -255,7 +255,7 @@ def WithdrawFunc(request):
                 messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
                 return redirect('withdraws')
             else:
-                message.error(request, 'You have not reached your target')
+                messages.error(request, 'You have not reached your target')
         else:
             messages.error(request, f"Phone number '{number}' is not valid or in the wrong format")
     else:
@@ -264,16 +264,19 @@ def WithdrawFunc(request):
 
 
 def Deposits(request):
-    user = request.user
-    client = Client.objects.get(user=user)
-    deposits = MpesaPayment.objects.filter(phone_number=client.username)
+    client = request.user.client
+    deposits = Pay.objects.filter(client=client)
     
     context = {'deposits':deposits}
     return render(request, 'app/history/deposits.html', context)
 
 
 def Withdrawals(request):
-    return render(request, 'app/history/withdraws.html')
+    client = request.user.client
+    deposits = Withdraw.objects.filter(client=client)
+
+    context = {'deposits':deposits}
+    return render(request, 'app/history/withdraws.html', context)
 
 
 @csrf_exempt

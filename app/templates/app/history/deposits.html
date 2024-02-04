@@ -27,23 +27,26 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  <!-- <th scope="col">#</th> -->
                   <th scope="col">ID</th>
-                  <th scope="col">Transaction Code</th>
+                  <!-- <th scope="col">Transaction Code</th> -->
                   <th scope="col">Amount</th>
                   <th scope="col">Phone Number</th>
-                  <th scope="col">Status</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Time</th>
                 </tr>
               </thead>
               <tbody>
                 {% for data in deposits %}
                 <tr>
-                  <th scope="row">1</th>
-                  <td>{{ forloop.counter0 }}</td>
-                  <td>{{data.description}}</td>
+                  <!-- <th scope="row">1</th> -->
+                  <!-- <td>{{ forloop.counter0 }}</td> -->
+                  <td>{{data.pay_id}}</td>
                   <td>{{data.amount}}</td>
-                  <td>{{data.phone_number}}</td>
-                  <td><span class="badge bg-success">Approved</span></td>
+                  <td>{{data.number}}</td>
+                  <td>{{data.created_date}}</td>
+                  <td>{{data.created_time}}</td>
+
                 </tr>
                 {% endfor %}
               </tbody>
