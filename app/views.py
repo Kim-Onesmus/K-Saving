@@ -19,7 +19,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def Index(request):
-    return render(request, 'app/index.html')
+    client = request.user.client
+    existing_plan = My_Plan.objects.filter(client=client).first()
+
+
+    context = {'existing_plan':existing_plan}
+    return render(request, 'app/index.html', context)
 
 
 def MyPlan(request):
