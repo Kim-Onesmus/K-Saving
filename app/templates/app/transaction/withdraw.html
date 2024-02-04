@@ -18,6 +18,16 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-7 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div id="floating">
+              {% for message in messages %}
+              <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                <button type="submit" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                {{message | safe}}
+              </div>
+              {% endfor %}
+            </div>
             <div class="card mb-3">
               <div class="card-body">
 
@@ -32,7 +42,8 @@
                     <label for="yourUsername" class="form-label">Phone number</label>
                     <div class="input-group has-validation">
                       <!-- <span class="input-group-text" id="inputGroupPrepend">+254</span> -->
-                      <input type="number" name="number" class="form-control" id="yourUsername" placeholder="2547......." required>
+                      <input type="number" name="number" class="form-control" id="yourUsername"
+                        placeholder="2547......." required>
                       <div class="invalid-feedback">Please enter your phone number.</div>
                     </div>
                   </div>

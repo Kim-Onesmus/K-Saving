@@ -154,6 +154,13 @@ def getAccessToken(request):
 
 @csrf_exempt
 def Deposit(request):
+    client = request.user.client
+    plan_existing = My_Plan.objects.filter(client=client).first()
+
+    if not plan_existing:
+        messages.error(request, 'Create a plan to Deposit')
+        return redirect('my_plan')
+
     if request.method == 'POST':
         number = request.POST['number']
         amount = request.POST['amount']
