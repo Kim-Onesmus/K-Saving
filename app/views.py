@@ -184,9 +184,10 @@ def Deposit(request):
 
             if response.status_code == 200:
                 mpesa_response = response.json()
-                print('Mpesa Respons', mpesa_response)
-                #  and mpesa_response['ResultCode'] == '0'
-                if 'ResponseCode' in mpesa_response == '0':
+                print('Mpesa Response', mpesa_response)
+                
+                # Check if 'ResponseCode' is in mpesa_response and its value is '0'
+                if 'ResponseCode' in mpesa_response and mpesa_response['ResponseCode'] == '0':
                     deposit = Pay.objects.create(
                         client=user.client,
                         amount=amount,
@@ -196,8 +197,8 @@ def Deposit(request):
                     messages.success(request, 'Deposit successful')
                     return redirect('deposit')
                 else:
-                    # Handle the case where the STK push request was canceled or failed
-                    messages.error(request, 'STK push request failed')
+                    # Handle the case where the 'ResponseCode' is not '0'
+                    messages.error(request, 'Deposit failed: ResponseCode is not 0')
             else:
                 # Handle the case where the API call failed
                 messages.error(request, 'M-Pesa API call failed')
