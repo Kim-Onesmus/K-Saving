@@ -226,6 +226,53 @@ def Deposit(request):
         return render(request, 'app/transaction/deposit.html')
     return render(request, 'app/transaction/deposit.html')
 
+def Withdraw(request):
+    client = request.user.client
+    existings_plan = My_Plan.objects.filter(client=client).first()
+    pays = Pay.objects.filter(client=client)
+    total_amount = sum(pay.amount for pay in pays)
+    remaining = existings_plan.target - total_amount
+    remaining_days = remaining/existings_plan.amount
+
+    if request.method == 'POST':
+        client = request.user
+        number = request.POST['number']
+        amount = request.POST['amount']
+
+        if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
+            if remaining >= total_amount:
+                withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
+                withdraw_details.save
+
+                subject = 'Smart Saver withdrawal request'
+                message = f'A withdrwal request of KSH.{amount} has been made for account {user.username}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [request.user.email, ]
+                send_mail( subject, message, email_from, recipient_list )
+                
+                messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
+                return redirect('withdraws')
+            else:
+                message.error(request, 'You have not reached your target')
+        else:
+            messages.error(request, f"Phone number '{number}' is not valid or in the wrong format")
+    else:
+        return render(request, 'app/transaction/withdraw.html')
+    return render(request, 'app/transaction/withdraw.html')
+
+
+def Deposits(request):
+    user = request.user
+    client = Client.objects.get(user=user)
+    deposits = MpesaPayment.objects.filter(phone_number=client.username)
+    
+    context = {'deposits':deposits}
+    return render(request, 'app/history/deposits.html', context)
+    
+
+def Withdrawals(request):
+    return render(request, 'app/history/withdraws.html')
+
 
 @csrf_exempt
 def register_urls(request):
@@ -280,36 +327,8 @@ def confirmation(request):
     }
     return JsonResponse(dict(context))
 
-def Withdraw(request):
 
-    return render(request, 'app/transaction/withdraw.html')
 
-def Deposits(request):
-    user = request.user
-    client = Client.objects.get(user=user)
-    deposits = MpesaPayment.objects.filter(phone_number=client.username)
-    
-    context = {'deposits':deposits}
-    return render(request, 'app/history/deposits.html', context)
-
-def Withdrawals(request):
-    client = request.user.client
-    existings_plan = My_Plan.objects.filter(client=client).first()
-    pays = Pay.objects.filter(client=client)
-    total_amount = sum(pay.amount for pay in pays)
-    remaining = existings_plan.target - total_amount
-    remaining_days = remaining/existings_plan.amount
-
-    if request.method == 'POST':
-        client = request.user
-        number = request.POST['number']
-        amount = request.POST['amount']
-
-        if remaining >= total_amount:
-            withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
-            withdraw_details.save
-            
-    return render(request, 'app/history/withdraws.html')
 
 def Contact(request):
     if request.method == 'POST':
