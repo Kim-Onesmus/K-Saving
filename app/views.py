@@ -24,6 +24,7 @@ def Index(request):
     pays = Pay.objects.filter(client=client)
     total_amount = sum(pay.amount for pay in pays)
     remaining = existings_plan.target - total_amount
+    remaining_days = remaining/existings_plan.amount
 
 
     context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining}
