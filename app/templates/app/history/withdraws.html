@@ -42,7 +42,7 @@
                   <td>{{data.amount}}</td>
                   <td>{{data.number}}</td>
                   {% if data.status == 'pending' %}
-                  <td><span class="badge bg-success">{{data.status}}</span></td>
+                  <td><span class="badge bg-warning">{{data.status}}</span></td>
                   {% elif data.status == 'cancelled' %}
                   <td><span class="badge bg-danger">Cancelled</span></td>
                   {% elif data.status == 'approved' %}
