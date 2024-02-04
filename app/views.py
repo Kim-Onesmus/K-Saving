@@ -16,6 +16,8 @@ from rest_framework import views, response, status
 from .serializers import MpesaResponseBodySerializer, TransactionSerializer
 from .models import MpesaResponseBody, Transaction
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def Index(request):
@@ -226,7 +228,7 @@ def Deposit(request):
         return render(request, 'app/transaction/deposit.html')
     return render(request, 'app/transaction/deposit.html')
 
-def Withdraw(request):
+def WithdrawFunc(request):
     client = request.user.client
     existings_plan = My_Plan.objects.filter(client=client).first()
     pays = Pay.objects.filter(client=client)
@@ -235,17 +237,17 @@ def Withdraw(request):
     remaining_days = remaining/existings_plan.amount
 
     if request.method == 'POST':
-        client = request.user
+        client = request.user.client
         number = request.POST['number']
         amount = request.POST['amount']
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
             if remaining >= total_amount:
                 withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
-                withdraw_details.save
+                withdraw_details.save()
 
                 subject = 'Smart Saver withdrawal request'
-                message = f'A withdrwal request of KSH.{amount} has been made for account {user.username}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
+                message = f'A withdrwal request of KSH.{amount} has been made for account {client}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [request.user.email, ]
                 send_mail( subject, message, email_from, recipient_list )
@@ -268,7 +270,7 @@ def Deposits(request):
     
     context = {'deposits':deposits}
     return render(request, 'app/history/deposits.html', context)
-    
+
 
 def Withdrawals(request):
     return render(request, 'app/history/withdraws.html')
