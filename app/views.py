@@ -356,7 +356,7 @@ def Contact(request):
 def About(request):
     return render(request, 'app/about.html')
 
-def Notification(request):
+def Notifications(request):
     return render(request, 'app/alert/notification.html')
 
 

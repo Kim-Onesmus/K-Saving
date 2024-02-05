@@ -24,7 +24,7 @@ urlpatterns = [
     path('contact', views.Contact, name='contact'),
     path('about', views.About, name='about'),
     
-    path('notification', views.Notification, name='notification'),
+    path('notification', views.Notifications, name='notification'),
 
     path("callback/", views.MpesaCallbackView.as_view(), name="callback"),
     path("transactions/", views.TransactionView.as_view(), name="transactions")
