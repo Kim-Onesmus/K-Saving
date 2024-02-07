@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
-from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw
+from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw, Notification
 from . forms import ClientForm, My_PlanForm
 from django.urls import reverse
 from django.forms.models import model_to_dict
@@ -357,6 +357,9 @@ def About(request):
     return render(request, 'app/about.html')
 
 def Notifications(request):
+    client = request.user.client
+    user_notification = Notification.objects.filter(client=client)
+    
     return render(request, 'app/alert/notification.html')
 
 
