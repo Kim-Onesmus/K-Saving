@@ -360,7 +360,7 @@ def Notifications(request):
     client = request.user.client
     user_notification = Notification.objects.filter(client=client)
 
-    contex = {'user_notification':user_notification}
+    context = {'user_notification':user_notification}
     return render(request, 'app/alert/notification.html', context)
 
 
