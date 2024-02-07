@@ -219,7 +219,7 @@ def Deposit(request):
                     deposit.save()
 
                     subject = 'Smart Saver Deposit request'
-                    message = f'KSH.{amount} has been deposited in your account {client}.Check your dashboard for verification. Thank you. Regards Smart Saver'
+                    message = f'KSH.{amount} has been deposited in your account {client}.\nCheck your dashboard for verification. \nThank you. \nRegards \nSmart Saver'
                     email_from = settings.EMAIL_HOST_USER
                     recipient_list = [request.user.email, ]
                     send_mail( subject, message, email_from, recipient_list )
@@ -262,7 +262,7 @@ def WithdrawFunc(request):
                 withdraw_details.save()
 
                 subject = 'Smart Saver withdrawal request'
-                message = f'A withdrwal request of KSH.{amount} has been made for account {client}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
+                message = f'A withdrwal request of KSH.{amount} has been made for account {client}.\nIf you did not make any request contact us to cancell the request. \nThank you. \nRegards \nSmart Saver'
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [request.user.email, ]
                 send_mail( subject, message, email_from, recipient_list )
@@ -368,9 +368,9 @@ def Contact(request):
 
 
         subject = contact_details.subject
-        message = contact_details.messange
-        email_from = [request.user.email, ]
-        recipient_list = settings.EMAIL_HOST_USER
+        message = f'Email from: {email} \n {contact_details.messange}'
+        email_from = request.user.email
+        recipient_list = [settings.EMAIL_HOST_USER, ]
         send_mail( subject, message, email_from, recipient_list )
 
         messages.info(request, 'Messange sent')
