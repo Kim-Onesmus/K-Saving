@@ -97,7 +97,7 @@
             </li>
 
             <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
+              <i class="text-warning"></i>
               <div id="notify">
 
               </div>
@@ -301,16 +301,21 @@
   notifyScoket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     const message = data.message;
+    const timestamp = new Date().toLocaleString(); // Get current date and time
     // Call the setMessage function to add the new li element
-    setMessage(message);
+    setMessage(message, timestamp);
   };
 
-  function setMessage(message) {
+  function setMessage(message, timestamp) {
     // Get the ul element with the id "notify"
     var ulElement = document.getElementById('notify');
 
     // Create a new li element
     var newLi = document.createElement('li');
+
+    // Create a Font Awesome icon element
+    var icon = document.createElement('i');
+    icon.className = 'bi bi-exclamation-circle';
 
     // Create a new anchor element
     var newAnchor = document.createElement('a');
@@ -318,8 +323,14 @@
     newAnchor.href = '#';
     newAnchor.textContent = message;
 
-    // Append the anchor element to the li element
+    // Create a paragraph element for the timestamp
+    var timestampElement = document.createElement('p');
+    timestampElement.textContent = 'Received at: ' + timestamp;
+
+    // Append the icon, anchor, and timestamp elements to the new li element
+    newLi.appendChild(icon);
     newLi.appendChild(newAnchor);
+    newLi.appendChild(timestampElement);
 
     // Append the new li element to the ul element
     ulElement.appendChild(newLi);
@@ -335,6 +346,8 @@
     document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
   }
 </script>
+
+
 
 </body>
 
