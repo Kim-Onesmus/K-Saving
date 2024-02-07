@@ -365,6 +365,14 @@ def Contact(request):
         
         contact_details = ContactUs.objects.create(name=name, email=email, subject=subject, messange=messange)
         contact_details.save()
+
+
+        subject = 'Smart Saver withdrawal request'
+        message = f'A withdrwal request of KSH.{amount} has been made for account {client}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.user.email, ]
+        send_mail( subject, message, email_from, recipient_list )
+
         messages.info(request, 'Messange sent')
         return redirect('contact')
     return render(request, 'app/contact.html')
