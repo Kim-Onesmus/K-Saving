@@ -367,10 +367,10 @@ def Contact(request):
         contact_details.save()
 
 
-        subject = 'Smart Saver withdrawal request'
-        message = f'A withdrwal request of KSH.{amount} has been made for account {client}.If you did not make any request contact us to cancell the request. Thank you. Regards Smart Saver'
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [request.user.email, ]
+        subject = contact_details.subject
+        message = contact_details.messange
+        email_from = [request.user.email, ]
+        recipient_list = settings.EMAIL_HOST_USER
         send_mail( subject, message, email_from, recipient_list )
 
         messages.info(request, 'Messange sent')
