@@ -217,6 +217,16 @@ def Deposit(request):
                         number=number,
                     )
                     deposit.save()
+
+                    subject = 'Smart Saver Deposit request'
+                    message = f'KSH.{amount} has been deposited in your account {client}.Check your dashboard for verification. Thank you. Regards Smart Saver'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [request.user.email, ]
+                    send_mail( subject, message, email_from, recipient_list )
+
+                    notification_data = Notification.objects.create(client=client, message=message)
+                    notification_data.save()
+                    
                     messages.success(request, 'Deposit successful')
                     return redirect('deposit')
                 else:
@@ -256,15 +266,18 @@ def WithdrawFunc(request):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [request.user.email, ]
                 send_mail( subject, message, email_from, recipient_list )
-
-                notification_data = Notification.objects.create(client=client, message=message)
                 
                 messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
-                return redirect('withdraws')
+                return redirect('withdraw')
+
+                notification_data = Notification.objects.create(client=client, message=message)
+                notification_data.save()
             else:
                 messages.error(request, 'You have not reached your target')
+                return redirect('withdraw')
         else:
             messages.error(request, f"Phone number '{number}' is not valid or in the wrong format")
+            return redirect('withdraw')
     else:
         return render(request, 'app/transaction/withdraw.html')
     return render(request, 'app/transaction/withdraw.html')
