@@ -106,7 +106,7 @@
               <hr class="dropdown-divider">
             </li>
             <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
+              <a href="{% url 'notification' %}">Show all notifications</a>
             </li>
           </ul>
 
@@ -311,11 +311,6 @@
     var ulElement = document.getElementById('notify');
 
     // Create a new li element
-    var newLi = document.createElement('li');
-
-    // Create a Font Awesome icon element
-    var icon = document.createElement('i');
-    icon.className = '';
 
     // Create a new anchor element
     var newAnchor = document.createElement('a');
