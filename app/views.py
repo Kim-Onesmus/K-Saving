@@ -225,7 +225,7 @@ def Deposit(request):
                     send_mail( subject, message, email_from, recipient_list )
 
                     notification_data = Notification.objects.create(client=client, message=message)
-                    notification_data.save()
+                    # notification_data.save()
                     
                     messages.success(request, 'Deposit successful')
                     return redirect('deposit')
@@ -268,7 +268,7 @@ def WithdrawFunc(request):
                 send_mail( subject, message, email_from, recipient_list )
 
                 notification_data = Notification.objects.create(client=client, message=message)
-                notification_data.save()
+                # notification_data.save()
                 
                 messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
                 return redirect('withdraw')
