@@ -266,12 +266,13 @@ def WithdrawFunc(request):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [request.user.email, ]
                 send_mail( subject, message, email_from, recipient_list )
+
+                notification_data = Notification.objects.create(client=client, message=message)
+                notification_data.save()
                 
                 messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
                 return redirect('withdraw')
 
-                notification_data = Notification.objects.create(client=client, message=message)
-                notification_data.save()
             else:
                 messages.error(request, 'You have not reached your target')
                 return redirect('withdraw')
