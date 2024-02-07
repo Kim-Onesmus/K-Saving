@@ -247,7 +247,7 @@ def WithdrawFunc(request):
         amount = request.POST['amount']
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
-            if total_amount <= remaining:
+            if total_amount >= remaining:
                 withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
                 withdraw_details.save()
 
@@ -256,6 +256,8 @@ def WithdrawFunc(request):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [request.user.email, ]
                 send_mail( subject, message, email_from, recipient_list )
+
+                notification_data = Notification.objects.create(client=client, message=message)
                 
                 messages.info(request, 'Withdraw request submitted, you will receive a notification once the payment is made.')
                 return redirect('withdraws')
