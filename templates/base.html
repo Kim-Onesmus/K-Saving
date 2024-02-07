@@ -30,27 +30,6 @@
   <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/simple-datatables/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
-  <style>
-    .bi {
-      font-size: 26px;
-    }
-
-    .bi[data-count]:after {
-      position: absolute;
-      right: 0%;
-      top: 1%;
-      content: attr(data-count);
-      font-size: 36%;
-      padding: .6em;
-      border-radius: 999px;
-      line-height: .75em;
-      color: white;
-      background: rgba(255, 0, 0, .85);
-      text-align: center;
-      min-width: 2em;
-      font-weight: bold;
-    }
-  </style>
 </head>
 
 <body>
@@ -85,12 +64,9 @@
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i id="bellCount" class="bi bi-bell" data-count='0'></i>
-            <span class="badge bg-primary badge-number data-count='0'"></span>
-          </a>
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-            <i id="bellCount" class="bi bi-bell" data-count="0"></i>
+            <i id="bellCount" class="fa-solid fa-bell" data-count="0"></i>
+                        <!-- <i class="bi bi-bell"></i> -->
+            <span class="badge bg-primary badge-number">4</span>
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
@@ -283,67 +259,11 @@
   <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
   <script src="{% static 'js/messange.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
   <script>
     var message_ele = document.getElementById("floating");
     setTimeout(function () {
       message_ele.style.display = "none"
     }, 30000);
-  </script>
-  <script>
-    // setup chat scoket
-    const notifyScoket = new WebSocket(
-      'ws://'
-      + window.location.host
-      + '/ws/notify/'
-    );
-
-    // on socket open
-    notifyScoket.onopen = function (e) {
-      console.log('Socket successfully connected.');
-    };
-
-    // on socket close
-    notifyScoket.onclose = function (e) {
-      console.log('Socket closed unexpectedly');
-    };
-
-    // on receiving message on group
-    notifyScoket.onmessage = function (e) {
-      const data = JSON.parse(e.data);
-      const message = data.message;
-      // Call the setMessage function to add the new li element
-      setMessage(message);
-
-    };
-
-    function setMessage(message) {
-      // Create a new li element
-      var newLi = document.createElement('li');
-
-      // Create a new anchor element
-      var newAnchor = document.createElement('a');
-      newAnchor.className = 'dropdown-item text-wrap';
-      newAnchor.href = '#';
-      newAnchor.textContent = message;
-
-      // Append the anchor element to the li element
-      newLi.appendChild(newAnchor);
-
-      // Get the ul element with the id "notify"
-      var ulElement = document.getElementById('notify');
-
-      // Append the new li element to the ul element
-      ulElement.appendChild(newLi);
-
-      // getting object of count
-      count = document.getElementById('bellCount').getAttribute('data-count');
-      document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
-    }
-
-
   </script>
 </body>
 
