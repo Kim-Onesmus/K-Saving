@@ -102,84 +102,81 @@
 
               </div>
             </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
           </ul>
 
-        <li>
-          <hr class="dropdown-divider">
         </li>
-        <li class="dropdown-footer">
-          <a href="#">Show all notifications</a>
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{{ user.client.profile_picture.url }}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block ps-2" id="userLastNameSpan"
+              style="text-transform: capitalize;font-size: 20px;"> {{user.first_name}}.</span>
+            <span>.</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{user.last_name}}</span>
+          </a>
+          <script>
+            // Get the element by its ID
+            var lastNameSpan = document.getElementById("userLastNameSpan");
+
+            // Get the text content and capitalize the first letter
+            var lastName = lastNameSpan.textContent.trim();
+            var capitalizedFirstLetter = lastName.charAt(0).toUpperCase();
+
+            // Replace the content of the element with the capitalized first letter
+            lastNameSpan.textContent = capitalizedFirstLetter;
+          </script>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{user.first_name}} {{user.last_name}}</h6>
+              <!-- <span>Web Designer</span> -->
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'contact' %}">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+          </ul>
         </li>
-
-      </ul>
-
-      </li>
-      <li class="nav-item dropdown pe-3">
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="{{ user.client.profile_picture.url }}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block ps-2" id="userLastNameSpan"
-            style="text-transform: capitalize;font-size: 20px;"> {{user.first_name}}.</span>
-          <span>.</span>
-          <span class="d-none d-md-block dropdown-toggle ps-2">{{user.last_name}}</span>
-        </a>
-        <script>
-          // Get the element by its ID
-          var lastNameSpan = document.getElementById("userLastNameSpan");
-
-          // Get the text content and capitalize the first letter
-          var lastName = lastNameSpan.textContent.trim();
-          var capitalizedFirstLetter = lastName.charAt(0).toUpperCase();
-
-          // Replace the content of the element with the capitalized first letter
-          lastNameSpan.textContent = capitalizedFirstLetter;
-        </script>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-          <li class="dropdown-header">
-            <h6>{{user.first_name}} {{user.last_name}}</h6>
-            <!-- <span>Web Designer</span> -->
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
-              <i class="bi bi-person"></i>
-              <span>My Profile</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
-              <i class="bi bi-gear"></i>
-              <span>Account Settings</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="{% url 'contact' %}">
-              <i class="bi bi-question-circle"></i>
-              <span>Need Help?</span>
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Sign Out</span>
-            </a>
-          </li>
-        </ul>
-      </li>
       </ul>
     </nav>
   </header>
@@ -282,59 +279,63 @@
   message_ele.style.display = "none"
   }, 30000);
   </script>
-  <script>
-    // setup chat scoket
-    const notifyScoket = new WebSocket(
-      'ws://'
-      + window.location.host
-      + '/ws/notify/'
-    );
+<script>
+  // setup chat scoket
+  const notifyScoket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/notify/'
+  );
 
-    // on socket open
-    notifyScoket.onopen = function (e) {
-      console.log('Socket successfully connected.');
-    };
+  // on socket open
+  notifyScoket.onopen = function (e) {
+    console.log('Socket successfully connected.');
+  };
 
-    // on socket close
-    notifyScoket.onclose = function (e) {
-      console.log('Socket closed unexpectedly');
-    };
+  // on socket close
+  notifyScoket.onclose = function (e) {
+    console.log('Socket closed unexpectedly');
+  };
 
-    // on receiving message on group
-    notifyScoket.onmessage = function (e) {
-      const data = JSON.parse(e.data);
-      const message = data.message;
-      // Call the setMessage function to add the new li element
-      setMessage(message);
+  // on receiving message on group
+  notifyScoket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const message = data.message;
+    // Call the setMessage function to add the new li element
+    setMessage(message);
+  };
 
-    };
+  function setMessage(message) {
+    // Get the ul element with the id "notify"
+    var ulElement = document.getElementById('notify');
 
-    function setMessage(message) {
-      // Create a new li element
-      var newLi = document.createElement('li');
+    // Create a new li element
+    var newLi = document.createElement('li');
 
-      // Create a new anchor element
-      var newAnchor = document.createElement('a');
-      newAnchor.className = 'dropdown-item text-wrap';
-      newAnchor.href = '#';
-      newAnchor.textContent = message;
+    // Create a new anchor element
+    var newAnchor = document.createElement('a');
+    newAnchor.className = 'dropdown-item text-wrap';
+    newAnchor.href = '#';
+    newAnchor.textContent = message;
 
-      // Append the anchor element to the li element
-      newLi.appendChild(newAnchor);
+    // Append the anchor element to the li element
+    newLi.appendChild(newAnchor);
 
-      // Get the ul element with the id "notify"
-      var ulElement = document.getElementById('notify');
+    // Append the new li element to the ul element
+    ulElement.appendChild(newLi);
 
-      // Append the new li element to the ul element
-      ulElement.appendChild(newLi);
+    // Create a horizontal line (hr) element
+    var divider = document.createElement('hr');
 
-      // getting object of count
-      count = document.getElementById('bellCount').getAttribute('data-count');
-      document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
-    }
+    // Append the horizontal line to the ul element
+    ulElement.appendChild(divider);
 
+    // getting object of count
+    count = document.getElementById('bellCount').getAttribute('data-count');
+    document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
+  }
+</script>
 
-  </script>
 </body>
 
 </html>
