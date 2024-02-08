@@ -48,6 +48,7 @@ def MyPlan(request):
         plan = request.POST['plan']
         amount = request.POST['amount']
         target = request.POST['target']
+        form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
         
         if plan and amount and target:
             if existing_plan:
@@ -60,7 +61,6 @@ def MyPlan(request):
                 messages.success(request, 'Plan saved successfully.')
                 return redirect('my_plan')
 
-        form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
         if form.is_valid():
             form.save()
             messages.info(request, 'Plan edited successfully')
