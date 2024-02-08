@@ -23,17 +23,18 @@ from django.conf import settings
 def Index(request):
     client = request.user.client
     existings_plan = My_Plan.objects.filter(client=client).first()
-    pays = Pay.objects.filter(client=client)
-    total_amount = sum(pay.amount for pay in pays)
-    remaining = existings_plan.target - total_amount
-    remaining_days = remaining/existings_plan.amount
+    if existings_plan:
+        pays = Pay.objects.filter(client=client)
+        total_amount = sum(pay.amount for pay in pays)
+        remaining = existings_plan.target - total_amount
+        remaining_days = remaining/existings_plan.amount
 
-    approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
-
-    # Deduct the withdrawal amounts from the total amount
-    for withdrawal in approved_withdrawals:
-        total_amount -= withdrawal.amount
-
+        approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
+        for withdrawal in approved_withdrawals:
+            total_amount -= withdrawal.amount
+    else:
+        messages.info(request, 'Make a plan to continue')
+        return redirect('my_plan')
     context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining, 'remaining_days':remaining_days}
     return render(request, 'app/index.html', context)
 
@@ -251,6 +252,10 @@ def Deposit(request):
 def WithdrawFunc(request):
     client = request.user.client
     existings_plan = My_Plan.objects.filter(client=client).first()
+    if not existings_plan:
+        messages.error(request, 'Create a plan to Deposit')
+        return redirect('my_plan')
+
     pays = Pay.objects.filter(client=client)
     total_amount = sum(pay.amount for pay in pays)
     remaining = existings_plan.target - total_amount
