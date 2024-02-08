@@ -75,7 +75,6 @@ def MyPlan(request):
     return render(request, 'app/plan.html', context)
 
 
-
 def Register(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
