@@ -54,6 +54,12 @@ def MyPlan(request):
             return redirect('my_plan')
 
         else:
+            form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Plan edited successfully')
+                return redirect('my_plan')
+
             new_plan = My_Plan(client=client, plan=plan, amount=amount, target=target)
             new_plan.save()
 
@@ -68,22 +74,6 @@ def MyPlan(request):
     context = {'form': form, 'existing_plan': existing_plan, 'planings': planings}
     return render(request, 'app/plan.html', context)
 
-def UpdatePlan(request):
-    user = request.user
-    client = user.client
-    existing_plan = My_Plan.objects.filter(client=client).first()
-    form = My_PlanForm(instance=existing_plan)
-
-    form = My_PlanForm(request.POST, request.FILES, instance=existing_plan)
-    if form.is_valid():
-        form.save()
-        messages.info(request, 'Plan edited successfully')
-        return redirect('my_plan')
-    else:
-        messages.error(request, 'An error occured')
-    planings = My_Plan.objects.filter(client=client)
-    context = {'form': form, 'existing_plan': existing_plan, 'planings': planings}
-    return render(request, 'app/plan.html', context)
 
 
 def Register(request):
