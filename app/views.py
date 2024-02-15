@@ -19,7 +19,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='login')
 def Index(request):
     client = request.user.client
     existing_plan = My_Plan.objects.filter(client=client).first()
@@ -38,7 +40,7 @@ def Index(request):
     return render(request, 'app/index.html', context)
 
 
-
+@login_required(login_url='login')
 def MyPlan(request):
     user = request.user
     client = user.client
@@ -112,7 +114,6 @@ def Register(request):
     return render(request, 'app/account/register.html')
 
 
-@csrf_exempt
 def Login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -135,6 +136,7 @@ def Login(request):
 def Verification(request):
     return render(request, 'app/account/code.html')
 
+@login_required(login_url='login')
 def Profile(request):
     user = request.user
     client = user.client
@@ -156,12 +158,14 @@ def Profile(request):
     context = {'form':form, 'password_form':password_form}
     return render(request, 'app/account/profile.html', context)
 
+@login_required(login_url='login')
 def Logout(request):
     if request.method == 'POST':
         auth.logout(request)
         messages.info(request, 'Logged Out')
         return redirect('login')
     return render(request, 'app/account/logout.html')
+
 
 
 def getAccessToken(request):
@@ -174,7 +178,8 @@ def getAccessToken(request):
     validated_mpesa_access_token = mpesa_access_toke['access_token']
     return HttpResponse(validated_mpesa_access_token)
 
-@csrf_exempt
+
+@login_required(login_url='login')
 def Deposit(request):
     client = request.user.client
     plan_existing = My_Plan.objects.filter(client=client).first()
@@ -249,6 +254,8 @@ def Deposit(request):
         return render(request, 'app/transaction/deposit.html')
     return render(request, 'app/transaction/deposit.html')
 
+
+@login_required(login_url='login')
 def WithdrawFunc(request):
     client = request.user.client
     existings_plan = My_Plan.objects.filter(client=client).first()
@@ -296,6 +303,7 @@ def WithdrawFunc(request):
     return render(request, 'app/transaction/withdraw.html')
 
 
+@login_required(login_url='login')
 def Deposits(request):
     client = request.user.client
     deposits = Pay.objects.filter(client=client)
@@ -304,6 +312,7 @@ def Deposits(request):
     return render(request, 'app/history/deposits.html', context)
 
 
+@login_required(login_url='login')
 def Withdrawals(request):
     client = request.user.client
     deposits = Withdraw.objects.filter(client=client)
@@ -367,7 +376,7 @@ def confirmation(request):
 
 
 
-
+@login_required(login_url='login')
 def Contact(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -389,9 +398,11 @@ def Contact(request):
         return redirect('contact')
     return render(request, 'app/contact.html')
 
+@login_required(login_url='login')
 def About(request):
     return render(request, 'app/about.html')
 
+@login_required(login_url='login')
 def Notifications(request):
     client = request.user.client
     user_notification = Notification.objects.filter(client=client)
