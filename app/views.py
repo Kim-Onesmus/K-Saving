@@ -269,7 +269,7 @@ def WithdrawFunc(request):
         amount = request.POST['amount']
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
-            if total_amount >= remaining:
+            if total_amount >= existings_plan.target:
                 withdraw_details = Withdraw.objects.create(client=client, number=number, amount=amount)
                 withdraw_details.save()
 
