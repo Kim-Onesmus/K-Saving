@@ -18,25 +18,25 @@ from .models import MpesaResponseBody, Transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.db.models import Sum
 
 def Index(request):
     client = request.user.client
-    existings_plan = My_Plan.objects.filter(client=client).first()
-    if existings_plan:
+    existing_plan = My_Plan.objects.filter(client=client).first()
+    if existing_plan:
         pays = Pay.objects.filter(client=client)
-        total_amount = sum(pay.amount for pay in pays)
-        remaining = existings_plan.target - total_amount
-        remaining_days = remaining/existings_plan.amount
-
+        total_amount = pays.aggregate(Sum('amount'))['amount__sum'] or 0  # Sum of all pay amounts
         approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
-        for withdrawal in approved_withdrawals:
-            total_amount -= withdrawal.amount
+        total_amount -= approved_withdrawals.aggregate(Sum('amount'))['amount__sum'] or 0
+        remaining = existing_plan.target - total_amount
+        remaining_days = remaining / existing_plan.amount
+
     else:
         messages.info(request, 'Make a plan to continue')
         return redirect('my_plan')
-    context = {'existings_plan':existings_plan, 'total_amount':total_amount, 'remaining':remaining, 'remaining_days':remaining_days}
+    context = {'existings_plan': existing_plan, 'total_amount': total_amount, 'remaining': remaining, 'remaining_days': remaining_days}
     return render(request, 'app/index.html', context)
+
 
 
 def MyPlan(request):
@@ -257,9 +257,11 @@ def WithdrawFunc(request):
         return redirect('my_plan')
 
     pays = Pay.objects.filter(client=client)
-    total_amount = sum(pay.amount for pay in pays)
+    total_amount = pays.aggregate(Sum('amount'))['amount__sum'] or 0
+    approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
+    total_amount -= approved_withdrawals.aggregate(Sum('amount'))['amount__sum'] or 0
     remaining = existings_plan.target - total_amount
-    remaining_days = remaining/existings_plan.amount
+    remaining_days = remaining / existing_plan.amount
 
     if request.method == 'POST':
         client = request.user.client
