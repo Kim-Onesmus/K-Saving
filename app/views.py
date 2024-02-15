@@ -261,7 +261,7 @@ def WithdrawFunc(request):
     approved_withdrawals = Withdraw.objects.filter(client=client, status='approved')
     total_amount -= approved_withdrawals.aggregate(Sum('amount'))['amount__sum'] or 0
     remaining = existings_plan.target - total_amount
-    remaining_days = remaining / existing_plan.amount
+    remaining_days = remaining / existings_plan.amount
 
     if request.method == 'POST':
         client = request.user.client
