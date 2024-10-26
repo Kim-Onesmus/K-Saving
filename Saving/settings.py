@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v37i%tt#3g_j_xy9z03+jz%ay#j936flo&pg@z3(f!dk9qd)ya'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -131,13 +131,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_URL = os.path.join(BASE_DIR, 'app/static')
-STATIC_ROOT = os.path.join(BASE_DIR, "app/static")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIR = os.path.join(BASE_DIR, 'app/static')
 
 
-MEDIA_DIR = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 # Default primary key field type
@@ -166,3 +166,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'contactrongoshops@gmail.com'
 EMAIL_HOST_PASSWORD = 'qmzbskujimhmbpzh'
 EMAIL_USE_SSL = False
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://392c-154-159-238-195.ngrok-free.app',  # Your ngrok URL
+]

@@ -98,28 +98,23 @@ class BaseModel(models.Model):
         abstract = True
 
 
-# M-pesa Payment models
 
-class MpesaCalls(BaseModel):
+
+
+class MpesaCallBacks(models.Model):
     ip_address = models.TextField()
     caller = models.TextField()
     conversation_id = models.TextField()
-    content = models.TextField()
-
-    class Meta:
-        verbose_name = 'Mpesa Call'
-        verbose_name_plural = 'Mpesa Calls'
-
-
-class MpesaCallBacks(BaseModel):
-    ip_address = models.TextField()
-    caller = models.TextField()
-    conversation_id = models.TextField()
-    content = models.TextField()
+    content = models.JSONField()  # Use JSONField to store JSON data
+    callback_metadata = models.JSONField(null=True, blank=True)
+    status = models.CharField(max_length=20, blank=True, null=True)  # Status field to mark success or failure
 
     class Meta:
         verbose_name = 'Mpesa Call Back'
         verbose_name_plural = 'Mpesa Call Backs'
+
+    def __str__(self):
+        return f"{self.caller} - {self.status}"
 
 
 class MpesaPayment(BaseModel):

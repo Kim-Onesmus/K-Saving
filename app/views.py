@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
-from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw, Notification
+from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw, Notification, MpesaCallBacks
 from . forms import ClientForm, My_PlanForm
 from django.urls import reverse
 from django.forms.models import model_to_dict
@@ -166,18 +166,15 @@ def Logout(request):
         return redirect('login')
     return render(request, 'app/account/logout.html')
 
-
-
 def getAccessToken(request):
-    consumer_key = 'AMOetkruFwpNeGQrnfQYMWbq1qyM5Iad'
-    consumer_secret = 'vHwWTtUKqYdovT2A'
+    consumer_key = 'cjzywGyM7GUpLFgfGq6gLi0Lpywd0dkcsfGOLFQEFWAGQjuU'
+    consumer_secret = 'JVmS2B8IfmpzxrKb4tessE5UzyvDOamEkpALWfs8SKJ01LaUSSk0QPyN4tXzWXM0'
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
-    r = request.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
     mpesa_access_toke = json.loads(r.text)
     validated_mpesa_access_token = mpesa_access_toke['access_token']
-    return HttpResponse(validated_mpesa_access_token)
-
+    return validated_mpesa_access_token
 
 @login_required(login_url='login')
 def Deposit(request):
@@ -194,9 +191,10 @@ def Deposit(request):
         user = request.user
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
-            access_token = MpesaAccessToken.validated_mpesa_access_token
+            access_token = getAccessToken(request)
+            print('Access token', str(access_token))
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-            headers = {"Authorization": "Bearer %s" % access_token}
+            headers = {"Authorization": f"Bearer {access_token}"}
 
             payload = {
                 "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
@@ -207,44 +205,20 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://30de-105-160-60-50.ngrok-free.app/callback/',
+                "CallBackURL": 'https://216e-154-159-238-195.ngrok-free.app/c2b/callback',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
-            print('Payload', payload)
-
+            # print('Payload', payload)
             response = requests.post(api_url, json=payload, headers=headers)
-            print('response', response)
-
+            print('Status code', response.status_code)
             if response.status_code == 200:
                 mpesa_response = response.json()
-                print('Mpesa Response', mpesa_response)
-                
-                # Check if 'ResponseCode' is in mpesa_response and its value is '0'
                 if 'ResponseCode' in mpesa_response and mpesa_response['ResponseCode'] == '0':
-                    deposit = Pay.objects.create(
-                        client=user.client,
-                        amount=amount,
-                        number=number,
-                    )
-                    deposit.save()
-
-                    subject = 'Smart Saver Deposit request'
-                    message = f'KSH.{amount} has been deposited in your account {client}.\nCheck your dashboard for verification. \nThank you. \nRegards \nSmart Saver'
-                    email_from = settings.EMAIL_HOST_USER
-                    recipient_list = [request.user.email, ]
-                    send_mail( subject, message, email_from, recipient_list )
-
-                    notification_data = Notification.objects.create(client=client, message=message)
-                    notification_data.save()
-                    
-                    messages.success(request, 'Deposit successful')
-                    return redirect('deposit')
+                    messages.success(request, 'Deposit initiated, please complete it on your M-Pesa app.')
                 else:
-                    # Handle the case where the 'ResponseCode' is not '0'
                     messages.error(request, 'Deposit failed: ResponseCode is not 0')
             else:
-                # Handle the case where the API call failed
                 messages.error(request, 'M-Pesa API call failed')
         else:
             messages.error(request, f"Phone number '{number}' is not valid or in the wrong format")
@@ -252,7 +226,96 @@ def Deposit(request):
         return redirect('deposit')
     else:
         return render(request, 'app/transaction/deposit.html')
-    return render(request, 'app/transaction/deposit.html')
+
+
+@csrf_exempt
+def call_back(request):
+    if request.method == 'POST':
+        print('M-Pesa callback received and being processed.......')
+        mpesa_body = request.body.decode('utf-8')
+        # print('Raw M-Pesa Body:', mpesa_body)
+        
+        try:
+            # Parse JSON response
+            mpesa_payment = json.loads(mpesa_body)
+            # print("Parsed M-Pesa Payment Data:", mpesa_payment)
+            
+            # Determine the status based on ResultCode
+            result_code = mpesa_payment['Body']['stkCallback']['ResultCode']
+            status = "Success" if result_code == 0 else "Failed"
+            print('Result Code', result_code)
+
+            # Save callback data, including all details and status
+            callback_entry = MpesaCallBacks(
+                ip_address=request.META.get('REMOTE_ADDR'),
+                caller=mpesa_payment['Body']['stkCallback']['MerchantRequestID'],
+                conversation_id=mpesa_payment['Body']['stkCallback']['CheckoutRequestID'],
+                content=mpesa_payment,  # Save the entire JSON content
+                status=status,
+            )
+            callback_entry.save()
+            
+            # Return the entire JSON response from M-Pesa
+            return JsonResponse(mpesa_payment, status=200, safe=False)
+
+        except json.JSONDecodeError:
+            print("Invalid JSON format in M-Pesa response.")
+            return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid JSON"}, status=400)
+    
+    elif request.method == 'GET':
+        # Handle GET request to display all callback records
+        callbacks = MpesaCallBacks.objects.all().values('ip_address', 'caller', 'conversation_id', 'content', 'status')
+        return JsonResponse(list(callbacks), safe=False)  # Convert QuerySet to list for JSON response
+    
+    # Invalid request method
+    return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid Request"}, status=400)
+
+@csrf_exempt
+def validation(request):
+    print('Validating...............')
+    context = {
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    }
+    return JsonResponse(dict(context))
+
+
+@csrf_exempt
+def confirmation(request):
+    print('Confirming................')
+    mpesa_body = request.body.decode('utf-8')
+    if not mpesa_body:
+        print("Empty request body received.")
+        return JsonResponse({"ResultCode": 1, "ResultDesc": "Empty request body"}, status=400)
+    
+    try:
+        mpesa_payment = json.loads(mpesa_body)
+        print("Received M-Pesa Payment Data:", mpesa_payment)
+        # Here you can save the confirmed payment details to your database if needed.
+        return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted", "body": mpesa_payment}, status=200)
+    
+    except json.JSONDecodeError:
+        print("JSON decoding error: Invalid JSON format in request body.")
+        return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid JSON format"}, status=400)
+
+
+@csrf_exempt
+def register_urls(request):
+    access_token = getAccessToken(request)  # Fetch the access token
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    headers = {"Authorization": "Bearer %s" % access_token}
+    
+    # Use your public URLs for confirmation and validation
+    options = {
+        "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
+        "ResponseType": "Completed",
+        "ConfirmationURL": "https://216e-154-159-238-195.ngrok-free.app/c2b/confirmation",  # Use your ngrok URL
+        "ValidationURL": "https://216e-154-159-238-195.ngrok-free.app/c2b/validation"  # Use your ngrok URL
+    }
+    
+    response = requests.post(api_url, json=options, headers=headers)
+
+    return HttpResponse(response.text)
 
 
 @login_required(login_url='login')
@@ -321,60 +384,6 @@ def Withdrawals(request):
     return render(request, 'app/history/withdraws.html', context)
 
 
-@csrf_exempt
-def register_urls(request):
-    access_token = MpesaAccessToken.validated_mpesa_access_token
-    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
-    headers = {"Authorization": "Bearer %s" % access_token}
-    options = {"ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
-               "ResponseType": "Completed",
-               "ConfirmationURL": "https://mydomain.com/confirmation",
-               "ValidationURL": "https://mydomain.com/validation"}
-    response = requests.post(api_url, json=options, headers=headers)
-
-    return HttpResponse(response.text)
-
-
-@csrf_exempt
-def call_back(request):
-    pass
-
-
-@csrf_exempt
-def validation(request):
-
-    context = {
-        "ResultCode": 0,
-        "ResultDesc": "Accepted"
-    }
-    return JsonResponse(dict(context))
-
-
-@csrf_exempt
-def confirmation(request):
-    mpesa_body =request.body.decode('utf-8')
-    mpesa_payment = json.loads(mpesa_body)
-
-    payment = MpesaPayment(
-        first_name=mpesa_payment['FirstName'],
-        last_name=mpesa_payment['LastName'],
-        middle_name=mpesa_payment['MiddleName'],
-        description=mpesa_payment['TransID'],
-        phone_number=mpesa_payment['MSISDN'],
-        amount=mpesa_payment['TransAmount'],
-        reference=mpesa_payment['BillRefNumber'],
-        organization_balance=mpesa_payment['OrgAccountBalance'],
-        type=mpesa_payment['TransactionType'],
-    )
-    print(payment)
-    payment.save()
-    context = {
-        "ResultCode": 0,
-        "ResultDesc": "Accepted"
-    }
-    return JsonResponse(dict(context))
-
-
 
 @login_required(login_url='login')
 def Contact(request):
@@ -410,40 +419,3 @@ def Notifications(request):
     context = {'user_notification':user_notification}
     return render(request, 'app/alert/notification.html', context)
 
-
-
-# CREATING A CALLBACK URL
-
-class MpesaCallbackView(views.APIView):
-    def post(self, request, format=None):
-        body = request.data
-
-        if body:
-            mpesa = MpesaResponseBody.objects.create(body=body)
-
-            mpesa_body = mpesa.body
-            print(mpesa_body)
-
-            if mpesa_body['stkCallback']['ResultCode'] == 0:
-                transaction = Transaction.objects.create(
-                    phonenumber=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][-1]["Value"],
-                    amount=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][0]["Value"],
-                    receipt_no=mpesa_body['Body']['stkCallback']['CallbackMetadata']['Item'][1]["Value"]
-                )
-                
-            return response.Response({"message": "Callback Data received and processed successfully."})
-        return response.Response({"failed": "No Callback Data Received"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    def get(self, request, format=None):
-        response_bodies = MpesaResponseBody.objects.all()
-        serializer = MpesaResponseBodySerializer(response_bodies, many=True)
-
-        return response.Response({"responses": serializer.data})
-
-
-class TransactionView(views.APIView):
-    def get(self, request, format=None):
-        transactions = Transaction.objects.all()
-        serializer = TransactionSerializer(transactions, many=True)
-
-        return response.Response({"transactions": serializer.data})
