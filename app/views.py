@@ -20,6 +20,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 @login_required(login_url='login')
 def Index(request):
@@ -167,8 +170,8 @@ def Logout(request):
     return render(request, 'app/account/logout.html')
 
 def getAccessToken(request):
-    consumer_key = 'cjzywGyM7GUpLFgfGq6gLi0Lpywd0dkcsfGOLFQEFWAGQjuU'
-    consumer_secret = 'JVmS2B8IfmpzxrKb4tessE5UzyvDOamEkpALWfs8SKJ01LaUSSk0QPyN4tXzWXM0'
+    consumer_key = os.getenv('CONSUMER_KEY')
+    consumer_secret = os.getenv('CONSUMER_SECRETE')
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
