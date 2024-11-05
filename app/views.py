@@ -178,11 +178,13 @@ def register_urls(request):
     access_token = getAccessToken(request)
     api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
     headers = {"Authorization": "Bearer %s" % access_token}
+    confirmation_url = request.build_absolute_uri(reverse('confirmation'))
+    validation_url = request.build_absolute_uri(reverse('validation'))
     options = {
         "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
         "ResponseType": "Completed",
-        "ConfirmationURL": f"{ngrok_url}/c2b/confirmation",
-        "ValidationURL": f"{ngrok_url}/c2b/validation"
+        "ConfirmationURL": confirmation_url,
+        "ValidationURL": validation_url,
     }
     
     response = requests.post(api_url, json=options, headers=headers)
@@ -221,6 +223,7 @@ def Deposit(request):
             print('Access token 1', str(access_token))
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
             headers = {"Authorization": f"Bearer {access_token}"}
+            callback_url = request.build_absolute_uri(reverse('call_back'))
 
             payload = {
                 "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
@@ -231,7 +234,7 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": f'{ngrok_url}/c2b/callback',
+                "CallBackURL": callback_url,
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
