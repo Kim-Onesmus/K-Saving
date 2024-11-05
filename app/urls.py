@@ -11,11 +11,11 @@ urlpatterns = [
     path('logout', views.Logout, name='logout'),
     
     path('deposit', views.Deposit, name='deposit'),
-    path('access/token', views.getAccessToken, name='get_mpesa_access_token'),
-    path('c2b/register', views.register_urls, name="register_mpesa_validation"),
-    path('c2b/confirmation', views.confirmation, name="confirmation"),
-    path('c2b/validation', views.validation, name="validation"),
-    path('c2b/callback', views.call_back, name="call_back"),
+    path('access/token/', views.getAccessToken, name='get_mpesa_access_token'),
+    path('c2b/register/', views.register_urls, name="register_mpesa_validation"),
+    path('c2b/confirmation/', views.confirmation, name="confirmation"),
+    path('c2b/validation/', views.validation, name="validation"),
+    path('c2b/callback/', views.call_back, name="call_back"),
     path('withdraw', views.WithdrawFunc, name='withdraw'),
     
     path('deposits', views.Deposits, name='deposits'),

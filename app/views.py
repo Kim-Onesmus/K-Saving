@@ -23,6 +23,9 @@ from django.contrib.auth.decorators import login_required
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 ngrok_url = 'https://2baf-154-159-238-117.ngrok-free.app'
@@ -435,4 +438,3 @@ def Notifications(request):
 
     context = {'user_notification':user_notification}
     return render(request, 'app/alert/notification.html', context)
-
