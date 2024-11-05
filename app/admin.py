@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Client, ContactUs, Withdraw, Pay, MpesaPayment, My_Plan, BaseModel, MpesaCallBacks, MpesaResponseBody, Transaction, Notification
+from . models import Client, ContactUs, Withdraw, Pay, MpesaTransaction, My_Plan, BaseModel, MpesaCallBacks, MpesaResponseBody, Transaction, Notification
 
 # Register your models here.
 @admin.register(Client)
@@ -16,9 +16,9 @@ class ContactUsTable(admin.ModelAdmin):
 class PayTable(admin.ModelAdmin):
     list_display = ('client', 'pay_id', 'amount', 'number', 'created_date', 'created_time')
     
-@admin.register(MpesaPayment)
+@admin.register(MpesaTransaction)
 class MpesaPaymentTable(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'middle_name', 'description', 'phone_number', 'amount', 'reference', 'organization_balance', 'type')
+    list_display = ('transaction_id', 'amount', 'transaction_time', 'account_reference', 'phone_number', 'payer_name')
  
 @admin.register(Withdraw)
 class WithdrawTable(admin.ModelAdmin):

@@ -117,23 +117,20 @@ class MpesaCallBacks(models.Model):
         return f"{self.caller} - {self.status}"
 
 
-class MpesaPayment(BaseModel):
+class MpesaTransaction(models.Model):
+    transaction_id = models.CharField(max_length=50, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField()
-    type = models.TextField()
-    reference = models.TextField()
-    first_name = models.CharField(max_length=100)
-    middle_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    phone_number = models.TextField()
-    organization_balance = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_time = models.CharField(max_length=14)  # or DateTimeField if you convert the string
+    account_reference = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20)
+    payer_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.transaction_id} - {self.amount}"
 
     class Meta:
         verbose_name = 'Mpesa Payment'
-        verbose_name_plural = 'Mpesa Payments'
-
-    def __str__(self):
-        return self.first_name    
+        verbose_name_plural = 'Mpesa Payments' 
     
     
 

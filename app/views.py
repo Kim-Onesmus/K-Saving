@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 import json
 import requests
-from . models import Client, ContactUs, MpesaPayment, My_Plan, Pay, Withdraw, Notification, MpesaCallBacks
+from . models import Client, ContactUs, MpesaTransaction, My_Plan, Pay, Withdraw, Notification, MpesaCallBacks
 from . forms import ClientForm, My_PlanForm
 from django.urls import reverse
 from django.forms.models import model_to_dict
@@ -23,6 +23,9 @@ from django.contrib.auth.decorators import login_required
 from dotenv import load_dotenv
 load_dotenv()
 import os
+
+
+ngrok_url = 'https://2baf-154-159-238-117.ngrok-free.app'
 
 @login_required(login_url='login')
 def Index(request):
@@ -116,7 +119,7 @@ def Register(request):
         return render(request, 'app/account/register.html')
     return render(request, 'app/account/register.html')
 
-
+@csrf_exempt
 def Login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -169,6 +172,24 @@ def Logout(request):
         return redirect('login')
     return render(request, 'app/account/logout.html')
 
+
+@csrf_exempt
+def register_urls(request):
+    access_token = getAccessToken(request)
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    headers = {"Authorization": "Bearer %s" % access_token}
+    options = {
+        "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
+        "ResponseType": "Completed",
+        "ConfirmationURL": f"{ngrok_url}/c2b/confirmation",
+        "ValidationURL": f"{ngrok_url}/c2b/validation"
+    }
+    
+    response = requests.post(api_url, json=options, headers=headers)
+
+    return HttpResponse(response.text)
+
+
 def getAccessToken(request):
     consumer_key = os.getenv('CONSUMER_KEY')
     consumer_secret = os.getenv('CONSUMER_SECRETE')
@@ -177,9 +198,11 @@ def getAccessToken(request):
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
     mpesa_access_toke = json.loads(r.text)
     validated_mpesa_access_token = mpesa_access_toke['access_token']
+    print('Access Token', validated_mpesa_access_token)
     return validated_mpesa_access_token
 
 @login_required(login_url='login')
+@csrf_exempt
 def Deposit(request):
     client = request.user.client
     plan_existing = My_Plan.objects.filter(client=client).first()
@@ -195,7 +218,7 @@ def Deposit(request):
 
         if len(number) == 12 and (number.startswith('254') or number.startswith('2547')):
             access_token = getAccessToken(request)
-            print('Access token', str(access_token))
+            print('Access token 1', str(access_token))
             api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
             headers = {"Authorization": f"Bearer {access_token}"}
 
@@ -208,11 +231,11 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": 'https://216e-154-159-238-195.ngrok-free.app/c2b/callback',
+                "CallBackURL": f'{ngrok_url}/c2b/callback',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
-            # print('Payload', payload)
+            print('Payload', payload)
             response = requests.post(api_url, json=payload, headers=headers)
             print('Status code', response.status_code)
             if response.status_code == 200:
@@ -236,45 +259,35 @@ def call_back(request):
     if request.method == 'POST':
         print('M-Pesa callback received and being processed.......')
         mpesa_body = request.body.decode('utf-8')
-        # print('Raw M-Pesa Body:', mpesa_body)
-        
         try:
-            # Parse JSON response
             mpesa_payment = json.loads(mpesa_body)
-            # print("Parsed M-Pesa Payment Data:", mpesa_payment)
-            
-            # Determine the status based on ResultCode
             result_code = mpesa_payment['Body']['stkCallback']['ResultCode']
             status = "Success" if result_code == 0 else "Failed"
             print('Result Code', result_code)
-
-            # Save callback data, including all details and status
             callback_entry = MpesaCallBacks(
                 ip_address=request.META.get('REMOTE_ADDR'),
                 caller=mpesa_payment['Body']['stkCallback']['MerchantRequestID'],
                 conversation_id=mpesa_payment['Body']['stkCallback']['CheckoutRequestID'],
-                content=mpesa_payment,  # Save the entire JSON content
+                content=mpesa_payment,
                 status=status,
             )
             callback_entry.save()
-            
-            # Return the entire JSON response from M-Pesa
             return JsonResponse(mpesa_payment, status=200, safe=False)
-
         except json.JSONDecodeError:
             print("Invalid JSON format in M-Pesa response.")
             return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid JSON"}, status=400)
     
     elif request.method == 'GET':
-        # Handle GET request to display all callback records
         callbacks = MpesaCallBacks.objects.all().values('ip_address', 'caller', 'conversation_id', 'content', 'status')
-        return JsonResponse(list(callbacks), safe=False)  # Convert QuerySet to list for JSON response
-    
-    # Invalid request method
+        return JsonResponse(list(callbacks), safe=False)
     return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid Request"}, status=400)
 
 @csrf_exempt
 def validation(request):
+    """
+    Handles the validation of incoming transactions.
+    Called by Safaricom before the transaction is completed.
+    """
     print('Validating...............')
     context = {
         "ResultCode": 0,
@@ -292,33 +305,31 @@ def confirmation(request):
         return JsonResponse({"ResultCode": 1, "ResultDesc": "Empty request body"}, status=400)
     
     try:
-        mpesa_payment = json.loads(mpesa_body)
-        print("Received M-Pesa Payment Data:", mpesa_payment)
-        # Here you can save the confirmed payment details to your database if needed.
-        return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted", "body": mpesa_payment}, status=200)
+        data = json.loads(request.body)
+        print("Received M-Pesa Payment Data:", data)
+        
+        transaction_id = data.get("TransID")
+        transaction_amount = data.get("TransAmount")
+        transaction_time = data.get("TransTime")
+        account_reference = data.get("BillRefNumber")
+        phone_number = data.get("MSISDN")
+        payer_name = data.get("FirstName")
+
+        # Save transaction details to database
+        MpesaTransaction.objects.create(
+            transaction_id=transaction_id,
+            amount=transaction_amount,
+            transaction_time=transaction_time,
+            account_reference=account_reference,
+            phone_number=phone_number,
+            payer_name=payer_name,
+        )
+        return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted", "body": data}, status=200)
     
     except json.JSONDecodeError:
         print("JSON decoding error: Invalid JSON format in request body.")
         return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid JSON format"}, status=400)
 
-
-@csrf_exempt
-def register_urls(request):
-    access_token = getAccessToken(request)  # Fetch the access token
-    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
-    headers = {"Authorization": "Bearer %s" % access_token}
-    
-    # Use your public URLs for confirmation and validation
-    options = {
-        "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
-        "ResponseType": "Completed",
-        "ConfirmationURL": "https://216e-154-159-238-195.ngrok-free.app/c2b/confirmation",  # Use your ngrok URL
-        "ValidationURL": "https://216e-154-159-238-195.ngrok-free.app/c2b/validation"  # Use your ngrok URL
-    }
-    
-    response = requests.post(api_url, json=options, headers=headers)
-
-    return HttpResponse(response.text)
 
 
 @login_required(login_url='login')
