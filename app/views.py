@@ -186,8 +186,10 @@ def register_urls(request):
     options = {
         "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
         "ResponseType": "Completed",
-        "ConfirmationURL": confirmation_url,
-        "ValidationURL": validation_url,
+        # "ConfirmationURL": confirmation_url,
+        # "ValidationURL": validation_url,
+        "ConfirmationURL": f'{ngrok_url}/c2b/confirmation/',
+        "ValidationURL": f'{ngrok_url}/c2b/validation/',
     }
     
     response = requests.post(api_url, json=options, headers=headers)
@@ -237,7 +239,8 @@ def Deposit(request):
                 "PartyA": number,
                 "PartyB": LipanaMpesaPpassword.Business_short_code,
                 "PhoneNumber": number,
-                "CallBackURL": callback_url,
+                # "CallBackURL": callback_url,
+                "CallBackURL": f'{ngrok_url}/c2b/callback/',
                 "AccountReference": "KimTech",
                 "TransactionDesc": "Savings"
             }
@@ -262,6 +265,7 @@ def Deposit(request):
 
 @csrf_exempt
 def call_back(request):
+    print('M-Pesa callback received and being processed.......')
     if request.method == 'POST':
         print('M-Pesa callback received and being processed.......')
         mpesa_body = request.body.decode('utf-8')
